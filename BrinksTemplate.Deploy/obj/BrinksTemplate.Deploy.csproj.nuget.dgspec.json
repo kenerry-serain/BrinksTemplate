@@ -1,0 +1,91 @@
+{
+  "format": 1,
+  "restore": {
+    "E:\\Repository\\BrinksTemplate\\BrinksTemplate.Deploy\\BrinksTemplate.Deploy.csproj": {}
+  },
+  "projects": {
+    "E:\\Repository\\BrinksTemplate\\BrinksTemplate.Deploy\\BrinksTemplate.Deploy.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\Repository\\BrinksTemplate\\BrinksTemplate.Deploy\\BrinksTemplate.Deploy.csproj",
+        "projectName": "BrinksTemplate.Deploy",
+        "projectPath": "E:\\Repository\\BrinksTemplate\\BrinksTemplate.Deploy\\BrinksTemplate.Deploy.csproj",
+        "packagesPath": "C:\\Users\\kserain\\.nuget\\packages\\",
+        "outputPath": "E:\\Repository\\BrinksTemplate\\BrinksTemplate.Deploy\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "configFilePaths": [
+          "C:\\Users\\kserain\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net472"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net472": {
+            "projectReferences": {
+              "E:\\Repository\\BrinksTemplate\\BrinksTemplate.ItemTemplate\\BrinksTemplate.ItemTemplate.csproj": {
+                "projectPath": "E:\\Repository\\BrinksTemplate\\BrinksTemplate.ItemTemplate\\BrinksTemplate.ItemTemplate.csproj"
+              },
+              "E:\\Repository\\BrinksTemplate\\BrinksTemplate.Wizard\\BrinksTemplate.Wizard.csproj": {
+                "projectPath": "E:\\Repository\\BrinksTemplate\\BrinksTemplate.Wizard\\BrinksTemplate.Wizard.csproj"
+              }
+            }
+          }
+        }
+      },
+      "frameworks": {
+        "net472": {
+          "dependencies": {
+            "Microsoft.VSSDK.BuildTools": {
+              "target": "Package",
+              "version": "[16.3.2099, )"
+            },
+            "Microsoft.VisualStudio.SDK": {
+              "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[16.0.202, )"
+            }
+          }
+        }
+      },
+      "runtimes": {
+        "win": {
+          "#import": []
+        },
+        "win-x64": {
+          "#import": []
+        },
+        "win-x86": {
+          "#import": []
+        }
+      }
+    },
+    "E:\\Repository\\BrinksTemplate\\BrinksTemplate.ItemTemplate\\BrinksTemplate.ItemTemplate.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\Repository\\BrinksTemplate\\BrinksTemplate.ItemTemplate\\BrinksTemplate.ItemTemplate.csproj",
+        "projectName": "BrinksTemplate.ItemTemplate",
+        "projectPath": "E:\\Repository\\BrinksTemplate\\BrinksTemplate.ItemTemplate\\BrinksTemplate.ItemTemplate.csproj"
+      },
+      "frameworks": {
+        "net472": {}
+      }
+    },
+    "E:\\Repository\\BrinksTemplate\\BrinksTemplate.Wizard\\BrinksTemplate.Wizard.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\Repository\\BrinksTemplate\\BrinksTemplate.Wizard\\BrinksTemplate.Wizard.csproj",
+        "projectName": "BrinksTemplate.Wizard",
+        "projectPath": "E:\\Repository\\BrinksTemplate\\BrinksTemplate.Wizard\\BrinksTemplate.Wizard.csproj"
+      },
+      "frameworks": {
+        "net472": {}
+      }
+    }
+  }
+}

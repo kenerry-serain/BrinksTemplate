@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>BrinksTemplate ItemTemplate</Name>
+    <Description>BrinksTemplate ItemTemplate</Description>
+    <Icon>BrinksTemplate.ItemTemplate.ico</Icon>
+    <TemplateID>dfda130a-0563-4f2b-98cc-ef34743e2d20</TemplateID>
+    <ProjectType>CSharp</ProjectType>
+    <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <DefaultName>Class.cs</DefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$Controller.cs" ReplaceParameters="true">API\Controller\EntityController.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$ReadOnlyRepository.cs" ReplaceParameters="true">Data\Mappings\EntityMap.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$ReadOnlyRepository.cs" ReplaceParameters="true">Data\Repositories\ReadOnly\EntityReadOnlyRepository.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$Repository.cs" ReplaceParameters="true">Data\Repositories\EntityRepository.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/I$EntityName$ReadOnlyRepository.cs" ReplaceParameters="true">Domain\Abstractions\Repositories\IEntityReadOnlyRepository.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/I$EntityName$Repository.cs" ReplaceParameters="true">Domain\Abstractions\Repositories\IEntityRepository.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/I$EntityName$Service.cs" ReplaceParameters="true">Domain\Abstractions\Services\IEntityService.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/Register$EntityName$Command.cs" ReplaceParameters="true">Domain\DTOs\Commands\RegisterEntityCommand.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/Update$EntityName$Command.cs" ReplaceParameters="true">Domain\DTOs\Commands\UpdateEntityCommand.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/Remove$EntityName$Command.cs" ReplaceParameters="true">Domain\DTOs\Commands\RemoveEntityCommand.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$Query.cs" ReplaceParameters="true">Domain\DTOs\Queries\EntityQuery.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$.cs" ReplaceParameters="true">Domain\Entities\Entity.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/Register$EntityName$CommandValidation.cs" ReplaceParameters="true">Domain\Services\Validations\RegisterEntityCommandValidation.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/Update$EntityName$CommandValidation.cs" ReplaceParameters="true">Domain\Services\Validations\UpdateEntityCommandValidation.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/Remove$EntityName$CommandValidation.cs" ReplaceParameters="true">Domain\Services\Validations\RemoveEntityCommandValidation.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$Service.cs" ReplaceParameters="true">Domain\Services\EntityService.cs</ProjectItem>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>BrinksTemplate.Wizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=74b65a59df0c7948</Assembly>
+    <FullClassName>BrinksTemplate.Wizard.WizardTemplate</FullClassName>
+  </WizardExtension>
+</VSTemplate>

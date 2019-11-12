@@ -1,0 +1,20 @@
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011">
+  <Metadata>
+    <Identity Id="BrinksTemplate.Deploy.a2cefce2-64c8-46f5-9bd8-4471f15bd458" Version="1.0" Language="en-US" Publisher="Kenerry Pierry Paulo Serain" />
+    <DisplayName>BrinksTemplate.Deploy</DisplayName>
+    <Description xml:space="preserve">Brinks Item Template</Description>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[16.0, 17.0)" />
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" Version="[4.5,)" />
+  </Dependencies>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[16.0,17.0)" DisplayName="Visual Studio core editor" />
+  </Prerequisites>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.Assembly" Path="BrinksTemplate.Wizard.dll" AssemblyName="BrinksTemplate.Wizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=74b65a59df0c7948" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" Path="ItemTemplates" />
+  </Assets>
+</PackageManifest>
