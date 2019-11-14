@@ -11,22 +11,22 @@
     <DefaultName>Class.cs</DefaultName>
   </TemplateData>
   <TemplateContent>
-    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$Controller.cs" ReplaceParameters="true">API\Controller\EntityController.cs</ProjectItem>
-    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$Map.cs" ReplaceParameters="true">Infra\Mappings\EntityMap.cs</ProjectItem>
-    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$ReadOnlyRepository.cs" ReplaceParameters="true">Infra\Repositories\ReadOnly\EntityReadOnlyRepository.cs</ProjectItem>
-    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$Repository.cs" ReplaceParameters="true">Infra\Repositories\EntityRepository.cs</ProjectItem>
-    <ProjectItem SubType="code" TargetFileName="temp/I$EntityName$ReadOnlyRepository.cs" ReplaceParameters="true">Domain\Abstractions\Repositories\IEntityReadOnlyRepository.cs</ProjectItem>
-    <ProjectItem SubType="code" TargetFileName="temp/I$EntityName$Repository.cs" ReplaceParameters="true">Domain\Abstractions\Repositories\IEntityRepository.cs</ProjectItem>
-    <ProjectItem SubType="code" TargetFileName="temp/I$EntityName$Service.cs" ReplaceParameters="true">Domain\Abstractions\Services\IEntityService.cs</ProjectItem>
-    <ProjectItem SubType="code" TargetFileName="temp/Register$EntityName$Command.cs" ReplaceParameters="true">Domain\DTOs\Commands\RegisterEntityCommand.cs</ProjectItem>
-    <ProjectItem SubType="code" TargetFileName="temp/Update$EntityName$Command.cs" ReplaceParameters="true">Domain\DTOs\Commands\UpdateEntityCommand.cs</ProjectItem>
-    <ProjectItem SubType="code" TargetFileName="temp/Remove$EntityName$Command.cs" ReplaceParameters="true">Domain\DTOs\Commands\RemoveEntityCommand.cs</ProjectItem>
-    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$Query.cs" ReplaceParameters="true">Domain\DTOs\Queries\EntityQuery.cs</ProjectItem>
-    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$.cs" ReplaceParameters="true">Domain\Entities\Entity.cs</ProjectItem>
-    <ProjectItem SubType="code" TargetFileName="temp/Register$EntityName$CommandValidation.cs" ReplaceParameters="true">Domain\Services\Validations\RegisterEntityCommandValidation.cs</ProjectItem>
-    <ProjectItem SubType="code" TargetFileName="temp/Update$EntityName$CommandValidation.cs" ReplaceParameters="true">Domain\Services\Validations\UpdateEntityCommandValidation.cs</ProjectItem>
-    <ProjectItem SubType="code" TargetFileName="temp/Remove$EntityName$CommandValidation.cs" ReplaceParameters="true">Domain\Services\Validations\RemoveEntityCommandValidation.cs</ProjectItem>
-    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$Service.cs" ReplaceParameters="true">Domain\Services\EntityService.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$Controller.cs" ReplaceParameters="true">SAPI\SController\EntityController.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$Map.cs" ReplaceParameters="true">SDomain\SData\SMappings\EntityMap.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$ReadOnlyRepository.cs" ReplaceParameters="true">SDomain\SData\SRepositories\SReadOnly\EntityReadOnlyRepository.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$Repository.cs" ReplaceParameters="true">SDomain\SData\SRepositories\EntityRepository.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/I$EntityName$ReadOnlyRepository.cs" ReplaceParameters="true">SDomain\SAbstractions\SRepositories\IEntityReadOnlyRepository.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/I$EntityName$Repository.cs" ReplaceParameters="true">SDomain\SAbstractions\SRepositories\IEntityRepository.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/I$EntityName$Service.cs" ReplaceParameters="true">SDomain\SAbstractions\SServices\IEntityService.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/Register$EntityName$Command.cs" ReplaceParameters="true">SDomain\SDTOs\SCommands\RegisterEntityCommand.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/Update$EntityName$Command.cs" ReplaceParameters="true">SDomain\SDTOs\SCommands\UpdateEntityCommand.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/Remove$EntityName$Command.cs" ReplaceParameters="true">SDomain\SDTOs\SCommands\RemoveEntityCommand.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$Query.cs" ReplaceParameters="true">SDomain\SDTOs\SQueries\EntityQuery.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$.cs" ReplaceParameters="true">SDomain\SEntities\Entity.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/Register$EntityName$CommandValidator.cs" ReplaceParameters="true">SDomain\SServices\SValidations\RegisterEntityCommandValidator.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/Update$EntityName$CommandValidator.cs" ReplaceParameters="true">SDomain\SServices\SValidations\UpdateEntityCommandValidator.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/Remove$EntityName$CommandValidator.cs" ReplaceParameters="true">SDomain\SServices\SValidations\RemoveEntityCommandValidator.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$Service.cs" ReplaceParameters="true">SDomain\SServices\EntityService.cs</ProjectItem>
   </TemplateContent>
   <WizardExtension>
     <Assembly>BrinksTemplate.Wizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=74b65a59df0c7948</Assembly>

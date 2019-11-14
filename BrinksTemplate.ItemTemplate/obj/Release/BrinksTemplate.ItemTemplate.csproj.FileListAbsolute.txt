@@ -1,0 +1,7 @@
+E:\Repository\BrinksTemplate\BrinksTemplate.ItemTemplate\bin\Release\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate.zip
+E:\Repository\BrinksTemplate\BrinksTemplate.ItemTemplate\obj\Release\BrinksTemplate.ItemTemplate.csprojAssemblyReference.cache
+E:\Repository\BrinksTemplate\BrinksTemplate.ItemTemplate\obj\Release\_EmptyResource.resources
+E:\Repository\BrinksTemplate\BrinksTemplate.ItemTemplate\obj\Release\BrinksTemplate.ItemTemplate.csproj.GenerateResource.cache
+E:\Repository\BrinksTemplate\BrinksTemplate.ItemTemplate\obj\Release\CSharp\1033\BrinksTemplate.ItemTemplate.zip
+E:\Repository\BrinksTemplate\BrinksTemplate.ItemTemplate\obj\Release\BrinksTemplate.ItemTemplate.dll
+E:\Repository\BrinksTemplate\BrinksTemplate.ItemTemplate\obj\Release\BrinksTemplate.ItemTemplate.pdb

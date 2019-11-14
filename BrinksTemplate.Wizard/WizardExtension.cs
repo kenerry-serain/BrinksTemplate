@@ -1,6 +1,7 @@
 ﻿using EnvDTE;
 using EnvDTE80;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace BrinksTemplate.Wizard
@@ -31,27 +32,40 @@ namespace BrinksTemplate.Wizard
         /// </summary>
         /// <param name="project"></param>
         /// <param name="item"> Objeto a ser adicionado. </param>
-        /// <param name="folderPath"> Pasta/Subpasta onde o objeto deve ser adicionado. </param>
-        public static void AddItemInFolder(this Project project, ProjectItem item, string folderPath)
+        /// <param name="folderStructure"> Pasta/Subpasta onde o objeto deve ser adicionado. </param>
+        public static void AddItemInFolder(this Project project, ProjectItem item, string folderStructure)
         {
             var lastFolder = default(ProjectItem);
             var beforeFolder = default(ProjectItem);
-            var folderCollection = folderPath.Split('.').ToList();
+            var folderCollection = folderStructure.Split('.').ToList();
             var folderCollectionCopy = folderCollection;
+            var pathTillNow = string.Empty;
 
             /* Percorrendo a lista de pastas */
-            foreach (var folder in folderCollection) //[data][repository]
+            foreach (var folder in folderCollection) 
             {
+                pathTillNow += $"\\{folder}";
+
                 /* Criando subpasta na pasta anterior */
                 if (beforeFolder != default(ProjectItem))
                 {
                     var actualFolderIndex = folderCollectionCopy.FindIndex(p => p == folder);
-                    var subFolder = GetSubfolder(folderCollectionCopy[actualFolderIndex], beforeFolder.ProjectItems);
-                    if (subFolder == default(ProjectItem))
-                        subFolder= beforeFolder.ProjectItems.AddFolder(folderCollectionCopy[actualFolderIndex]);
+                    var projectSubFolder = GetSubfolder(folderCollectionCopy[actualFolderIndex], beforeFolder.ProjectItems);
+
+                    /* A pasta já existe na solução? */
+                    if (projectSubFolder == default(ProjectItem))//[data][repostiorry]
+                    {
+                        var folderDirectory = $"{project.FullName.Substring(0, project.FullName.LastIndexOf('\\'))}{pathTillNow}";
+                        var subFolderExists = Directory.Exists(folderDirectory);
+                        
+                        if (subFolderExists)
+                            Directory.Delete(folderDirectory);
+
+                        projectSubFolder = beforeFolder.ProjectItems.AddFolder(folderCollectionCopy[actualFolderIndex]);
+                    }
                     
-                    beforeFolder = subFolder;
-                    lastFolder = subFolder;
+                    beforeFolder = projectSubFolder;
+                    lastFolder = projectSubFolder;
                 }
                 else
                 {

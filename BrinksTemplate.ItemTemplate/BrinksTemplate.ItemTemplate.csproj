@@ -54,23 +54,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="API\Controller\EntityController.cs" />
-    <None Include="Infra\Repositories\EntityRepository.cs" />
-    <None Include="Infra\Repositories\ReadOnly\EntityReadOnlyRepository.cs" />
-    <None Include="Domain\Abstractions\Repositories\IEntityRepository.cs" />
-    <None Include="Domain\Abstractions\Services\IEntityService.cs" />
-    <None Include="Domain\DTOs\Commands\RegisterEntityCommand.cs" />
-    <None Include="Domain\DTOs\Commands\RemoveEntityCommand.cs" />
-    <None Include="Domain\DTOs\Commands\UpdateEntityCommand.cs" />
-    <None Include="Domain\DTOs\Queries\EntityQuery.cs" />
-    <None Include="Domain\Entities\Entity.cs" />
-    <None Include="Domain\Abstractions\Repositories\IEntityReadOnlyRepository.cs" />
-    <None Include="Infra\Mappings\EntityMap.cs" />
+    <None Include="SAPI\SController\EntityController.cs" />
+    <None Include="SDomain\SData\SRepositories\EntityRepository.cs" />
+    <None Include="SDomain\SData\SRepositories\SReadOnly\EntityReadOnlyRepository.cs" />
+    <None Include="SDomain\SAbstractions\SRepositories\IEntityRepository.cs" />
+    <None Include="SDomain\SAbstractions\SServices\IEntityService.cs" />
+    <None Include="SDomain\SDTOs\SCommands\RegisterEntityCommand.cs" />
+    <None Include="SDomain\SDTOs\SCommands\RemoveEntityCommand.cs" />
+    <None Include="SDomain\SDTOs\SCommands\UpdateEntityCommand.cs" />
+    <None Include="SDomain\SDTOs\SQueries\EntityQuery.cs" />
+    <None Include="SDomain\SEntities\Entity.cs" />
+    <None Include="SDomain\SAbstractions\SRepositories\IEntityReadOnlyRepository.cs" />
+    <None Include="SDomain\SData\SMappings\EntityMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Domain\Services\EntityService.cs" />
-    <None Include="Domain\Services\Validations\RegisterEntityCommandValidation.cs" />
-    <None Include="Domain\Services\Validations\RemoveEntityCommandValidation.cs" />
-    <None Include="Domain\Services\Validations\UpdateEntityCommandValidation.cs" />
+    <None Include="SDomain\SServices\EntityService.cs" />
+    <None Include="SDomain\SServices\SValidations\RegisterEntityCommandValidator.cs" />
+    <None Include="SDomain\SServices\SValidations\RemoveEntityCommandValidator.cs" />
+    <None Include="SDomain\SServices\SValidations\UpdateEntityCommandValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BrinksTemplate.ItemTemplate.ico" />
