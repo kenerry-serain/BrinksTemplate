@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace $DomainServicesInterfaceNamespace$
 {
+    /// <summary>
+    /// Interface do serviço da entidade $EntityName$. 
+    /// </summary>
     public interface I$EntityName$Service : IService<$EntityName$>
     {
         Task<IEnumerable<$EntityName$Query>> GetAllAsync();

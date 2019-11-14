@@ -1,6 +1,3 @@
-E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\BrinksTemplate.Deploy.csprojAssemblyReference.cache
-E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\_EmptyResource.resources
-E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\BrinksTemplate.Deploy.csproj.GenerateResource.cache
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\bin\Debug\BrinksTemplate.Deploy.dll
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\bin\Debug\BrinksTemplate.Deploy.pdb
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\bin\Debug\BrinksTemplate.Deploy.pkgdef
@@ -10,6 +7,9 @@ E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\bin\Debug\BrinksTemplate.Wiza
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\bin\Debug\Microsoft.VisualStudio.TemplateWizardInterface.dll
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\bin\Debug\BrinksTemplate.Wizard.pdb
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\bin\Debug\Microsoft.VisualStudio.TemplateWizardInterface.xml
+E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\BrinksTemplate.Deploy.csprojAssemblyReference.cache
+E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\_EmptyResource.resources
+E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\BrinksTemplate.Deploy.csproj.GenerateResource.cache
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\BrinksTemplate.Deploy.csproj.CopyComplete
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\BrinksTemplate.Deploy.dll
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\BrinksTemplate.Deploy.pdb
@@ -20,8 +20,9 @@ E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\files.json
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\TemplateManifests\templateManifest0.1033.vstman
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate\BrinksTemplate.ItemTemplate.ico
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate\API\Controller\EntityController.cs
-E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate\Data\Repositories\ReadOnly\EntityReadOnlyRepository.cs
-E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate\Data\Repositories\EntityRepository.cs
+E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate\Infra\Mappings\EntityMap.cs
+E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate\Infra\Repositories\ReadOnly\EntityReadOnlyRepository.cs
+E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate\Infra\Repositories\EntityRepository.cs
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate\Domain\Abstractions\Repositories\IEntityReadOnlyRepository.cs
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate\Domain\Abstractions\Repositories\IEntityRepository.cs
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate\Domain\Abstractions\Services\IEntityService.cs
@@ -36,4 +37,3 @@ E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CShar
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate\Domain\Services\EntityService.cs
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate\BrinksTemplate.ItemTemplate.vstemplate
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\templateFiles.json
-E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate\Data\Mappings\EntityMap.cs

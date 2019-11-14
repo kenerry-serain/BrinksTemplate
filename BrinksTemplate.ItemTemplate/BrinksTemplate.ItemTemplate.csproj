@@ -55,8 +55,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="API\Controller\EntityController.cs" />
-    <None Include="Data\Repositories\EntityRepository.cs" />
-    <None Include="Data\Repositories\ReadOnly\EntityReadOnlyRepository.cs" />
+    <None Include="Infra\Repositories\EntityRepository.cs" />
+    <None Include="Infra\Repositories\ReadOnly\EntityReadOnlyRepository.cs" />
     <None Include="Domain\Abstractions\Repositories\IEntityRepository.cs" />
     <None Include="Domain\Abstractions\Services\IEntityService.cs" />
     <None Include="Domain\DTOs\Commands\RegisterEntityCommand.cs" />
@@ -65,7 +65,7 @@
     <None Include="Domain\DTOs\Queries\EntityQuery.cs" />
     <None Include="Domain\Entities\Entity.cs" />
     <None Include="Domain\Abstractions\Repositories\IEntityReadOnlyRepository.cs" />
-    <None Include="Data\Mappings\EntityMap.cs" />
+    <None Include="Infra\Mappings\EntityMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Domain\Services\EntityService.cs" />
     <None Include="Domain\Services\Validations\RegisterEntityCommandValidation.cs" />

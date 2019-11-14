@@ -100,7 +100,7 @@
             Grid.Row="2"
             Width="87"
             Height="31"
-            Margin="0,0,33,5"
+            Margin="0,0,33,28"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             Background="{x:Null}"
@@ -109,7 +109,7 @@
             Click="buttonCancel_Click"
             Content="Cancelar"
             Foreground="#FFDC0C0C"
-            RenderTransformOrigin="0.349,-0.802" />
+            RenderTransformOrigin="0.349,-0.802" Grid.RowSpan="2" />
         <Label
             x:Name="label_Copy11"
             Width="126"
@@ -156,15 +156,15 @@
             Grid.Row="2"
             Width="87"
             Height="31"
-            Margin="0,0,134,5"
+            Margin="0,0,134,28"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             Background="Black"
             BorderBrush="#FF0CDC6B"
             BorderThickness="0.8,0.8,0.8,0.8"
             Click="buttonGenerate_Click"
-            Content="Gerar"
+            Content="Crudar"
             Foreground="#FF0CDC6B"
-            RenderTransformOrigin="0.349,-0.802" />
+            RenderTransformOrigin="0.349,-0.802" Grid.RowSpan="2" />
     </Grid>
 </Window>

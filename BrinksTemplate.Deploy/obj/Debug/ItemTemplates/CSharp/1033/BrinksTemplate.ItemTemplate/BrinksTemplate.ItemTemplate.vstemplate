@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name>BrinksTemplate ItemTemplate</Name>
-    <Description>BrinksTemplate ItemTemplate</Description>
+    <Name>Brinks Model</Name>
+    <Description>Complete and functional model</Description>
     <Icon>BrinksTemplate.ItemTemplate.ico</Icon>
     <TemplateID>dfda130a-0563-4f2b-98cc-ef34743e2d20</TemplateID>
     <ProjectType>CSharp</ProjectType>
@@ -12,9 +12,9 @@
   </TemplateData>
   <TemplateContent>
     <ProjectItem SubType="code" TargetFileName="temp/$EntityName$Controller.cs" ReplaceParameters="true">API\Controller\EntityController.cs</ProjectItem>
-    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$ReadOnlyRepository.cs" ReplaceParameters="true">Data\Mappings\EntityMap.cs</ProjectItem>
-    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$ReadOnlyRepository.cs" ReplaceParameters="true">Data\Repositories\ReadOnly\EntityReadOnlyRepository.cs</ProjectItem>
-    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$Repository.cs" ReplaceParameters="true">Data\Repositories\EntityRepository.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$Map.cs" ReplaceParameters="true">Infra\Mappings\EntityMap.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$ReadOnlyRepository.cs" ReplaceParameters="true">Infra\Repositories\ReadOnly\EntityReadOnlyRepository.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$Repository.cs" ReplaceParameters="true">Infra\Repositories\EntityRepository.cs</ProjectItem>
     <ProjectItem SubType="code" TargetFileName="temp/I$EntityName$ReadOnlyRepository.cs" ReplaceParameters="true">Domain\Abstractions\Repositories\IEntityReadOnlyRepository.cs</ProjectItem>
     <ProjectItem SubType="code" TargetFileName="temp/I$EntityName$Repository.cs" ReplaceParameters="true">Domain\Abstractions\Repositories\IEntityRepository.cs</ProjectItem>
     <ProjectItem SubType="code" TargetFileName="temp/I$EntityName$Service.cs" ReplaceParameters="true">Domain\Abstractions\Services\IEntityService.cs</ProjectItem>

@@ -25,7 +25,7 @@ namespace BrinksTemplate.Wizard
             }
             return null;
         }
-
+        
         /// <summary>
         /// Adiciona um item em uma pasta/subpasta. Profundidade máxima de duas pastas.
         /// </summary>
@@ -34,72 +34,52 @@ namespace BrinksTemplate.Wizard
         /// <param name="folderPath"> Pasta/Subpasta onde o objeto deve ser adicionado. </param>
         public static void AddItemInFolder(this Project project, ProjectItem item, string folderPath)
         {
+            var lastFolder = default(ProjectItem);
+            var beforeFolder = default(ProjectItem);
             var folderCollection = folderPath.Split('.').ToList();
-            var copyListaCollection = folderCollection;
+            var folderCollectionCopy = folderCollection;
 
             /* Percorrendo a lista de pastas */
-            foreach (var folder in folderCollection)
+            foreach (var folder in folderCollection) //[data][repository]
             {
-                /* Verificando se a primeira pasta existe */
-                var firstFolder = project.GetProjectItem(folder, Constants.vsProjectItemKindPhysicalFolder);
-                if (firstFolder != null)
+                /* Criando subpasta na pasta anterior */
+                if (beforeFolder != default(ProjectItem))
                 {
-                    if (copyListaCollection.Count() > 1)
-                    {
-                        var actualFolderIndex = copyListaCollection.FindIndex(p => p == folder);
-                        var secondFolder = project.GetProjectItem(copyListaCollection[actualFolderIndex + 1], Constants.vsProjectItemKindPhysicalFolder);
-                        if (secondFolder != null)
-                        {
-                            secondFolder.ProjectItems.AddFromFileCopy(item.FileNames[0]);
-                            break;
-                        }
-                        else
-                        {
-                            /* FOLDER REPOSITORY ALREADY EXISTS */
-                            secondFolder = firstFolder.ProjectItems.AddFolder(copyListaCollection[actualFolderIndex + 1]);
-                            if (secondFolder != null)
-                            {
-                                secondFolder.ProjectItems.AddFromFileCopy(item.FileNames[0]);
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        firstFolder.ProjectItems.AddFromFileCopy(item.FileNames[0]);
-                    }
+                    var actualFolderIndex = folderCollectionCopy.FindIndex(p => p == folder);
+                    var subFolder = GetSubfolder(folderCollectionCopy[actualFolderIndex], beforeFolder.ProjectItems);
+                    if (subFolder == default(ProjectItem))
+                        subFolder= beforeFolder.ProjectItems.AddFolder(folderCollectionCopy[actualFolderIndex]);
+                    
+                    beforeFolder = subFolder;
+                    lastFolder = subFolder;
                 }
-                else /* Caso a primeira pasta não exista */
+                else
                 {
-                    firstFolder = project.ProjectItems.AddFolder(folder);
-                    if (firstFolder != null)
-                    {
-                        if (copyListaCollection.Count > 1) /* Caso seja para inserir o arquivo em uma pasta dentro de outra pasta */
-                        {
-                            var actualFolderIndex = copyListaCollection.FindIndex(p => p == folder);
-                            var secondFolder = firstFolder.ProjectItems.AddFolder(copyListaCollection[actualFolderIndex + 1]);
-                            if (secondFolder != null)
-                            {
-                                secondFolder.ProjectItems.AddFromFileCopy(item.FileNames[0]);
-                                break;
-                            }
-                            else
-                            {
-                                secondFolder = firstFolder.ProjectItems.AddFolder(copyListaCollection[actualFolderIndex + 1]);
-                                if (secondFolder != null)
-                                {
-                                    secondFolder.ProjectItems.AddFromFileCopy(item.FileNames[0]);
-                                    break;
-                                }
-                            }
-                        }
-                        else /* Caso seja para inserir o arquivo nesta pasta */
-                        {
-                            firstFolder.ProjectItems.AddFromFileCopy(item.FileNames[0]);
-                        }
-                    }
+                    /* Criando primeira pasta */
+                    var rootFolder = project.GetProjectItem(folder, Constants.vsProjectItemKindPhysicalFolder);
+                    if (rootFolder == default(ProjectItem))
+                        rootFolder = project.ProjectItems.AddFolder(folder);
+
+                    beforeFolder = rootFolder;
+                    lastFolder = rootFolder;
                 }
             }
+
+            lastFolder.ProjectItems.AddFromFileCopy(item.FileNames[0]);
+        }
+        private static ProjectItem GetSubfolder(string folderName, ProjectItems folderProjectItems)
+        {
+            var subFolder = default(ProjectItem);
+            foreach (ProjectItem folderItem in folderProjectItems)
+            {
+                if (folderItem.Name == folderName && folderItem.Kind == Constants.vsProjectItemKindPhysicalFolder)
+                {
+                    subFolder = folderItem;
+                    break;
+                }
+            }
+
+            return subFolder;
         }
 
         /// <summary>

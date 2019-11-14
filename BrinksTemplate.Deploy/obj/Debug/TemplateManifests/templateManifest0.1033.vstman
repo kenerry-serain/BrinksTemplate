@@ -4,8 +4,8 @@
     <TemplateFileName>BrinksTemplate.ItemTemplate.vstemplate</TemplateFileName>
     <VSTemplateHeader>
       <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
-        <Name>BrinksTemplate ItemTemplate</Name>
-        <Description>BrinksTemplate ItemTemplate</Description>
+        <Name>Brinks Model</Name>
+        <Description>Complete and functional model</Description>
         <Icon>BrinksTemplate.ItemTemplate.ico</Icon>
         <TemplateID>dfda130a-0563-4f2b-98cc-ef34743e2d20</TemplateID>
         <ProjectType>CSharp</ProjectType>

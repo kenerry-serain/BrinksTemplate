@@ -1,10 +1,12 @@
 ﻿using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TemplateWizard;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace BrinksTemplate.Wizard
 {
@@ -18,21 +20,30 @@ namespace BrinksTemplate.Wizard
         , _webApiProject
         , _domainProject
         , _solutionName
+        , _entityQuery
+        , _entityServiceInterface
+        , _entityService
+        , _entityRepositoryInterface
+        , _entityRepository
+        , _entityReadOnlyRepositoryInterface
+        , _entityReadOnlyRepository
         , _partialSolutionDirectory
         , _solutionDirectory;
+        private Dictionary<string, string> _replacementsDictionary;
+        private IList<string> commandCollection, commandValidationCollection;
 
         public string _databaseEntity;
         public WizardTemplate()
         {
             _dte = (DTE)Package.GetGlobalService(typeof(DTE));
-            SetSolutionName();
+            SetSolutionConfig();
         }
 
         public void BeforeOpeningFile(ProjectItem projectItem) { }
         public void ProjectFinishedGenerating(Project project) { }
 
         /// <summary>
-        /// Este metodo coloca cada classe dentro do seu projeto e dentro da sua pasta(a).
+        /// Insere cada classe dentro do seu projeto e dentro da sua pasta(a).
         /// </summary>
         /// <param name="projectItem"></param>
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
@@ -40,6 +51,8 @@ namespace BrinksTemplate.Wizard
             var item = Path.GetFileNameWithoutExtension(projectItem.Name);
             var folder = string.Empty;
             var project = default(Project);
+
+            InitializeEnvironmentVariables();
 
             /* Domain entity */
             if (item == _entityName)
@@ -49,66 +62,66 @@ namespace BrinksTemplate.Wizard
             }
 
             /* Domain repository interface */
-            else if (item == $"I{_entityName}Repository")
+            else if (item == _entityRepositoryInterface)
             {
                 project = GetProjectByName(_domainProject);
                 folder = "Abstractions.Repositories";
             }
 
             /* Domain read only repository interface */
-            else if (item == $"I{_entityName}ReadOnlyRepository")
+            else if (item == _entityReadOnlyRepositoryInterface)
             {
                 project = GetProjectByName(_domainProject);
                 folder = "Abstractions.Repositories.ReadOnly";
             }
 
             /* Domain service interface*/
-            else if (item == $"I{_entityName}Service")
+            else if (item == _entityServiceInterface)
             {
                 project = GetProjectByName(_domainProject);
                 folder = "Abstractions.Services";
             }
 
             /* Domain commands */
-            else if (item == $"Register{_entityName}Command" || item == $"Update{_entityName}Command" || item == $"Remove{_entityName}Command")
+            else if (commandCollection.Contains(item))
             {
                 project = GetProjectByName(_domainProject);
-                folder = "DTOs.Commands";
+                folder = $"DTOs.Commands.{_entityName}";
             }
 
             /* Domain query */
-            else if (item == $"{_entityName}Query")
+            else if (item == _entityQuery)
             {
                 project = GetProjectByName(_domainProject);
-                folder = "DTOs.Queries";
+                folder = $"DTOs.Queries.{_entityName}";
             }
 
             /* Domain commands validation */
-            else if (item == $"Register{_entityName}CommandValidation" || item == $"Update{_entityName}CommandValidation" || item == $"Remove{_entityName}CommandValidation")
+            else if (commandValidationCollection.Contains(item))
             {
                 project = GetProjectByName(_domainProject);
-                folder = "Services";
+                folder = $"Services.Validations.{_entityName}";
             }
 
             /* Domain service */
-            else if (item == $"{_entityName}Service")
+            else if (item == _entityService)
             {
                 project = GetProjectByName(_domainProject);
                 folder = "Services";
             }
 
             /* Domain repository */
-            else if (item == $"{_entityName}Repository")
+            else if (item == _entityRepository)
             {
                 project = GetProjectByName(_domainProject);
                 folder = "Data.Repositories";
             }
 
             /* Domain read only repository */
-            else if (item == $"{_entityName}ReadOnlyRepository")
+            else if (item == _entityReadOnlyRepository)
             {
                 project = GetProjectByName(_domainProject);
-                folder = "Data.Repositories";
+                folder = "Data.Repositories.ReadOnly";
             }
 
             /* Domain map */
@@ -122,11 +135,38 @@ namespace BrinksTemplate.Wizard
             else if (item == $"{_entityName}Controller")
             {
                 project = GetProjectByName(_webApiProject);
-                folder = "API.Controllers";
+                folder = "Controllers";
             }
-            
+
             project.AddItemInFolder(projectItem, folder);
             _pastaTemp = (ProjectItem)projectItem.Collection.Parent;
+        }
+
+        /// <summary>
+        /// Setup váriaveis de ambiente
+        /// </summary>
+        private void InitializeEnvironmentVariables()
+        {
+            commandCollection = new List<string>
+            {
+                $"Register{_entityName}Command",
+                $"Update{_entityName}Command",
+                $"Remove{_entityName}Command"
+            };
+            commandValidationCollection = new List<string>
+            {
+                $"Register{_entityName}CommandValidation",
+                $"Update{_entityName}CommandValidation",
+                $"Remove{_entityName}CommandValidation"
+            };
+
+            _entityQuery = $"{_entityName}Query";
+            _entityRepositoryInterface = $"I{_entityName}Repository";
+            _entityReadOnlyRepositoryInterface = $"I{_entityName}ReadOnlyRepository";
+            _entityServiceInterface = $"I{_entityName}Service";
+            _entityService = $"{_entityName}Service";
+            _entityRepository = $"{_entityName}Repository";
+            _entityReadOnlyRepository = $"{_entityName}ReadOnlyRepository";
         }
 
         /// <summary>
@@ -145,7 +185,7 @@ namespace BrinksTemplate.Wizard
 
             var optionsForm = new OptionsForm(_solutionProjectCollection.OrderBy(project => project.Name).Select(project => project.Name));
             optionsForm.ShowDialog();
-
+            
             _webApiProject = optionsForm.WebApiProject;
             _domainProject = optionsForm.DomainProject;
 
@@ -154,6 +194,7 @@ namespace BrinksTemplate.Wizard
 
             //_contextName = GetContextName();
             SetParameters(replacementsDictionary);
+            _replacementsDictionary = replacementsDictionary;
         }
 
         /// <summary>
@@ -165,190 +206,244 @@ namespace BrinksTemplate.Wizard
             _pastaTemp?.Remove();
             _pastaTemp?.Delete();
 
-            //ApplicationIoCConfig();
-            //RepositoryIoCConfig();
-            //AutoMapperConfig();
+            IoCConfig();
+            AutoMapperConfig();
             //ContextConfig();
             //CreateEntity();
         }
+
 
         public bool ShouldAddProjectItem(string filePath)
         {
             return !OptionsForm.IsCanceled;
         }
 
+        /// <summary>
+        /// Setup IoC Config
+        /// </summary>
+        private void IoCConfig()
+        {
+            AutofacApplicationModules();
+            AutofacInfrastructureModules();
+        }
 
-        ///// <summary>
-        ///// Seleciona o nome do contexto padrão da solução.
-        ///// </summary>
-        ///// <returns></returns>
-        //private string GetContextName()
-        //{
-        //    var contextName = "Contexto";
+        /// <summary>
+        /// Injeta as dependências referente ao modulo de aplicação
+        /// </summary>
+        private void AutofacApplicationModules()
+        {
+            var folderName = "\\AutofacModules";
+            var applicationModuleName = "\\ApplicationModule.cs";
+            var directory = Directory.GetDirectories(_partialSolutionDirectory).FirstOrDefault(dir => dir.EndsWith(_webApiProject));
+            var infraModuleDirectory = string.Concat(directory, folderName, applicationModuleName);
+            var infraModuleLines = File.ReadAllLines(infraModuleDirectory);
 
-        //    var contextDirectory = string.Concat(_solutionDirectory, "\\", _repositoryProject, "\\Contexto");
-        //    var filesContextDirectory = Directory.GetFiles(contextDirectory);
+            using (var writer = new StreamWriter(infraModuleDirectory))
+            {
+                for (int currentLine = 1; currentLine <= infraModuleLines.Count(); ++currentLine)
+                {
+                    if (infraModuleLines[currentLine - 1].Contains("();"))
+                    {
+                        writer.WriteLine(infraModuleLines[currentLine - 1]);
+                        writer.WriteLine($"builder.RegisterType<{_entityServiceInterface}>().As<{_entityService}>()");
+                    }
+                    else
+                    {
+                        writer.WriteLine(infraModuleLines[currentLine - 1]);
+                    }
+                }
+            }
+        }
 
-        //    if (filesContextDirectory.Any())
-        //    {
-        //        var contextExists = filesContextDirectory
-        //                            ?.Where(c => c.EndsWith(string.Concat("Finamax", contextName, ".cs")))
-        //                            ?.ToList()
-        //                            ?.FirstOrDefault();
+        /// <summary>
+        /// Injeta as dependências referente ao modulo de infraestrutura
+        /// </summary>
+        private void AutofacInfrastructureModules()
+        {
+            var folderName = "\\AutofacModules";
+            var infraModuleName = "\\InfraModule.cs";
+            var directory = Directory.GetDirectories(_partialSolutionDirectory).FirstOrDefault(dir => dir.EndsWith(_webApiProject));
+            var infraModuleDirectory = string.Concat(directory, folderName, infraModuleName);
+            var infraModuleLines = File.ReadAllLines(infraModuleDirectory);
 
-        //        return contextExists != null ? string.Concat("Finamax", contextName) : string.Empty;
-        //    }
+            using (var writer = new StreamWriter(infraModuleDirectory))
+            {
+                for (int currentLine = 1; currentLine <= infraModuleLines.Count(); ++currentLine)
+                {
+                    if (infraModuleLines[currentLine - 1].Contains("();"))
+                    {
+                        writer.WriteLine(infraModuleLines[currentLine - 1]);
+                        writer.WriteLine($"builder.RegisterType<{_entityRepositoryInterface}>().As<{_entityRepository}>()");
+                        writer.WriteLine($"builder.RegisterType<{_entityReadOnlyRepositoryInterface}>().As<{_entityReadOnlyRepository}>()");
+                    }
+                    else
+                    {
+                        writer.WriteLine(infraModuleLines[currentLine - 1]);
+                    }
+                }
+            }
+        }
 
-        //    return string.Empty;
-        //}
+        /// <summary>
+        /// Adiciona a configuração de DbSet.
+        /// </summary>
+        private void ContextConfig()
+        {
+            var folderName = "\\Data\\Contexts";
+            var context = "\\OccurrenceDbContext.cs";
+            var directory = Directory.GetDirectories(_partialSolutionDirectory).FirstOrDefault(dir => dir.EndsWith(_webApiProject));
+            var infraModuleDirectory = string.Concat(directory, folderName, context);
+            var infraModuleLines = File.ReadAllLines(infraModuleDirectory);
 
-        /////// <summary>
-        /////// Injeta as dependências referente a aplicação.
-        /////// </summary>
-        //private void ApplicationIoCConfig()
-        //{
-        //    var folderName = "\\Contexto";
-        //    var applicationName = string.Concat(_entityName, "AppService");
-        //    var applicationIoCDirectory = string.Concat(_solutionDirectory, "\\", _iocProject, folderName, "\\ApplicationIoC.cs");
-
-        //    var applicationLines = File.ReadAllLines(applicationIoCDirectory);
-
-        //    using (var writer = new StreamWriter(applicationIoCDirectory))
-        //    {
-        //        for (int currentLine = 1; currentLine <= applicationLines.Count(); ++currentLine)
-        //        {
-        //            if (currentLine == applicationLines.Count() - 3)
-        //            {
-        //                writer.WriteLine(string.Concat(applicationLines[currentLine - 1],
-        //                                 ApplicationIoC.Container(_entityName)));
-        //            }
-        //            else
-        //            {
-        //                writer.WriteLine(applicationLines[currentLine - 1]);
-        //            }
-        //        }
-        //    }
-        //}
-
-        /////// <summary>
-        /////// Injeta as dependências referente ao repositório.
-        /////// </summary>
-        //private void RepositoryIoCConfig()
-        //{
-        //    var folderName = "\\Contexto";
-        //    //var repositoryName = string.Concat(_entityName, "Repositorio");
-        //    var repositoryIoCDirectory = string.Concat(_solutionDirectory, "\\", _iocProject, folderName, "\\RepositoryIoC.cs");
-
-        //    var repositoryLines = File.ReadAllLines(repositoryIoCDirectory);
-
-        //    using (var writer = new StreamWriter(repositoryIoCDirectory))
-        //    {
-        //        for (int currentLine = 1; currentLine <= repositoryLines.Count(); ++currentLine)
-        //        {
-        //            if (currentLine == repositoryLines.Count() - 3)
-        //            {
-        //                writer.WriteLine(string.Concat(repositoryLines[currentLine - 1],
-        //                                 RepositoryIoC.Container(_entityName)));
-        //            }
-        //            else
-        //            {
-        //                writer.WriteLine(repositoryLines[currentLine - 1]);
-        //            }
-        //        }
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Adiciona a configuração de DbSet.
-        ///// </summary>
-        //private void ContextConfig()
-        //{
-        //    var contextName = string.Concat(GetContextName(), ".cs");
-        //    var contextDirectory = string.Concat(_solutionDirectory, "\\", _repositoryProject, "\\Contexto\\", contextName);
-
-        //    var contextLines = File.ReadAllLines(contextDirectory);
-        //    var writed = false;
-        //    using (var writer = new StreamWriter(contextDirectory))
-        //    {
-        //        for (int currentLine = 1; currentLine <= contextLines.Count(); ++currentLine)
-        //        {
-        //            if (contextLines[currentLine - 1].Contains("DbSet"))
-        //            {
-        //                if (!writed)
-        //                {
-        //                    writer.WriteLine(string.Concat(contextLines[currentLine - 1],
-        //                                                     Context.ConfigDbSet(_entityName)));
-        //                    writed = true;
-        //                }
-        //                else
-        //                {
-        //                    writer.WriteLine(contextLines[currentLine - 1]);
-        //                }
-        //            }
-        //            else
-        //            {
-        //                writer.WriteLine(contextLines[currentLine - 1]);
-        //            }
-        //        }
-        //    }
-        //}
+            using (var writer = new StreamWriter(infraModuleDirectory))
+            {
+                for (int currentLine = 1; currentLine <= infraModuleLines.Count(); ++currentLine)
+                {
+                    if (infraModuleLines[currentLine - 1].Contains("();"))
+                    {
+                        writer.WriteLine(infraModuleLines[currentLine - 1]);
+                        writer.WriteLine($"builder.RegisterType<{_entityRepositoryInterface}>().As<{_entityRepository}>()");
+                        writer.WriteLine($"builder.RegisterType<{_entityReadOnlyRepositoryInterface}>().As<{_entityReadOnlyRepository}>()");
+                    }
+                    else
+                    {
+                        writer.WriteLine(infraModuleLines[currentLine - 1]);
+                    }
+                }
+            }
+        }
 
 
-        /////// <summary>
-        /////// Adiciona configuração de mapeamento.
-        ///// </summary>
-        //private void AutoMapperConfig()
-        //{
-        //    var folderName = "\\Mapeamento";
-        //    var mapperProfileName = "\\MapeamentoProfile.cs";
-        //    var mapperDirectory = string.Concat(_solutionDirectory, "\\", _applicationProject, folderName, mapperProfileName);
+        /// <summary>
+        /// Adiciona configuração de mapeamento.
+        /// </summary>
+        private void AutoMapperConfig()
+        {
+            SetupCommandToDomainProfile();
+            SetupDomainToQueryProfile();
+        }
 
-        //    var contextLines = File.ReadAllLines(mapperDirectory);
-        //    var writed = false;
-        //    using (var writer = new StreamWriter(mapperDirectory))
-        //    {
-        //        for (int currentLine = 1; currentLine <= contextLines.Count(); ++currentLine)
-        //        {
-        //            if (contextLines[currentLine - 1].Contains("CreateMap"))
-        //            {
-        //                if (!writed)
-        //                {
-        //                    writer.WriteLine(string.Concat(contextLines[currentLine - 1],
-        //                                     string.Format("{0}", MapperConfig.CreateMap(_entityName))));
-        //                    writed = true;
-        //                }
-        //                else
-        //                {
-        //                    writer.WriteLine(contextLines[currentLine - 1]);
-        //                }
-        //            }
-        //            else
-        //            {
-        //                writer.WriteLine(contextLines[currentLine - 1]);
-        //            }
-        //        }
-        //    }
-        //}
+        /// <summary>
+        /// AutoMapper domain to query
+        /// </summary>
+        private void SetupDomainToQueryProfile()
+        {
+            var folderName = "\\Mappers";
+            var mapperProfileName = "\\DomainToQueryProfile.cs";
+            var directory = Directory.GetDirectories(_partialSolutionDirectory).FirstOrDefault(dir => dir.EndsWith(_domainProject));
+            var mapperDirectory = string.Concat(directory, folderName, mapperProfileName);
+            var domainToQueryProfileLines = File.ReadAllLines(mapperDirectory);
+            var alreadyWritedMap = false;
+            var alreadyWritedUsing = false;
+            using (var writer = new StreamWriter(mapperDirectory))
+            {
+                var domainQueriesNamespace = _replacementsDictionary["$DomainQueriesNamespace$"];
+                var entityQueryNamespace = $"using {domainQueriesNamespace}.{_entityName};";
+                for (int currentLine = 1; currentLine <= domainToQueryProfileLines.Count(); ++currentLine)
+                {
+                    var alreadyWritedDefaultLine = false;
+                    if (!alreadyWritedUsing)
+                    {
+                        if (!domainToQueryProfileLines.Contains(entityQueryNamespace))
+                        {
+                            if (domainToQueryProfileLines[currentLine - 1].Contains("using"))
+                            {
+                                writer.WriteLine(domainToQueryProfileLines[currentLine - 1]);
+                                writer.WriteLine($"{entityQueryNamespace}");
+                                alreadyWritedUsing = true;
+                                alreadyWritedDefaultLine = true;
+                            }
+                        }
+                    }
 
+                    if (!alreadyWritedMap)
+                    {
+                        if (domainToQueryProfileLines[currentLine - 1].Contains("();"))
+                        {
+                            writer.WriteLine(domainToQueryProfileLines[currentLine - 1]);
+                            writer.WriteLine($"\t\t\tCreateMap<{_entityName}, {_entityQuery}>();");
+                            alreadyWritedMap = true;
+                            alreadyWritedDefaultLine = true;
+                        }
+                    }
+
+                    if (!alreadyWritedDefaultLine)
+                        writer.WriteLine(domainToQueryProfileLines[currentLine - 1]);
+                }
+            }
+        }
+
+        /// <summary>
+        /// AutoMapper command to domain
+        /// </summary>
+        private void SetupCommandToDomainProfile()
+        {
+            var folderName = "\\Mappers";
+            var mapperProfileName = "\\CommandToDomainProfile.cs";
+            var directory = Directory.GetDirectories(_partialSolutionDirectory).FirstOrDefault(dir => dir.EndsWith(_domainProject));
+            var mapperDirectory = string.Concat(directory, folderName, mapperProfileName);
+            var commandToDomainProfileLines = File.ReadAllLines(mapperDirectory);
+            var alreadyWritedMap = false;
+            var alreadyWritedUsing = false;
+            using (var writer = new StreamWriter(mapperDirectory))
+            {
+                var domainCommandNamespace = _replacementsDictionary["$DomainCommandsNamespace$"];
+                var entityCommandNamespace = $"using {domainCommandNamespace}.{_entityName};";
+                for (int currentLine = 1; currentLine <= commandToDomainProfileLines.Count(); ++currentLine)
+                {
+                    var alreadyWritedDefaultLine = false;
+                    if (!alreadyWritedUsing)
+                    {
+                        if (!commandToDomainProfileLines.Contains(entityCommandNamespace))
+                        {
+                            if (commandToDomainProfileLines[currentLine - 1].Contains("using"))
+                            {
+                                writer.WriteLine(commandToDomainProfileLines[currentLine - 1]);
+                                writer.WriteLine($"{entityCommandNamespace}");
+                                alreadyWritedUsing = true;
+                                alreadyWritedDefaultLine = true;
+                            }
+                        }
+                    }
+
+                    if (commandToDomainProfileLines[currentLine - 1].Contains("();"))
+                    {
+                        if (!alreadyWritedMap)
+                        {
+                            foreach (var item in commandCollection)
+                            {
+                                writer.WriteLine(commandToDomainProfileLines[currentLine - 1]);
+                                writer.WriteLine($"\t\t\tCreateMap<{item}, {_entityName}>();");
+                            }
+                            alreadyWritedMap = true;
+                            alreadyWritedDefaultLine = true;
+                        }
+                    }
+
+                    if (!alreadyWritedDefaultLine)
+                        writer.WriteLine(commandToDomainProfileLines[currentLine - 1]);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Encontra um projeto pelo nome
+        /// </summary>
+        /// <param name="nomeProjeto"></param>
+        /// <returns></returns>
         private Project GetProjectByName(string nomeProjeto)
         {
             return _solutionProjectCollection.FirstOrDefault(it => it.Name == nomeProjeto);
         }
 
-        private void SetSolutionName()
+        /// <summary>
+        /// Inicializa váriaveis de solução
+        /// </summary>
+        private void SetSolutionConfig()
         {
             _partialSolutionDirectory = _dte.Solution.FullName.Substring(0, _dte.Solution.FullName.LastIndexOf('\\'));
             _solutionName = _dte.Solution.FullName.Substring(_partialSolutionDirectory.Length).Replace("\\", "").Replace(".sln", "");
             _solutionDirectory = string.Concat(_partialSolutionDirectory, "\\", _solutionName);
-
-            if (_solutionName.Contains("."))
-            {
-                if (_solutionName.Split('.').Length > 1)
-                {
-                    var lastPosition = _solutionName.Split('.').Length;
-                    _solutionName = _solutionName.Split('.')[lastPosition - 1];
-                }
-            }
         }
 
         /// <summary>
@@ -384,10 +479,11 @@ namespace BrinksTemplate.Wizard
             replacementsDictionary.Add("$DomainCoreExceptionsNamespace$", $"{_solutionName}.Core.Exceptions");
             replacementsDictionary.Add("$DomainCoreServicesNamespace$", $"{_solutionName}.Core.Services");
 
-            replacementsDictionary.Add("InfrastructureDataAccessNamespace$", "Brinks.Infra.DataAccess");
-            replacementsDictionary.Add("InfrastructureDataAccessEFNamespace$", "Brinks.Infra.DataAccess.EntityFramework");
-            replacementsDictionary.Add("InfrastructureDataAccessEFInterfacesNamespace$", "Brinks.Infra.DataAccess.EntityFramework.Abstractions");
+            replacementsDictionary.Add("$InfrastructureDataAccessNamespace$", "Brinks.Infra.DataAccess");
+            replacementsDictionary.Add("$InfrastructureDataAccessEFNamespace$", "Brinks.Infra.DataAccess.EntityFramework");
+            replacementsDictionary.Add("$InfrastructureDataAccessEFInterfacesNamespace$", "Brinks.Infra.DataAccess.EntityFramework.Abstractions");
             replacementsDictionary.Add("$InfrastructureLocalizationNamespace$", "Brinks.Infra.Localization");
+            replacementsDictionary.Add("$InfrastructureDataAccessInterfacesNamespace$", "Brinks.Infra.DataAccess.Abstractions");
         }
     }
 }

@@ -4,7 +4,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace $DomainDataMappingNamespace$
 {
-    public class EntityMap : IEntityTypeConfiguration<$EntityName$>
+    /// <summary>
+    /// Classe para mapear nomes de propriedades da aplicação para o banco de dados
+    /// </summary>
+    public class $EntityName$Map : IEntityTypeConfiguration<$EntityName$>
     {
         public void Configure(EntityTypeBuilder<$EntityName$> builder)
         {
