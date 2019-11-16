@@ -40,6 +40,7 @@ E:\Repository\BrinksTemplate\BrinksTemplate.Wizard\bin\Debug\Microsoft.VisualStu
 E:\Repository\BrinksTemplate\BrinksTemplate.Wizard\bin\Debug\pt-BR\Microsoft.VisualStudio.Shell.15.0.resources.dll
 E:\Repository\BrinksTemplate\BrinksTemplate.Wizard\bin\Debug\en\Microsoft.VisualStudio.Imaging.resources.dll
 E:\Repository\BrinksTemplate\BrinksTemplate.Wizard\bin\Debug\pt-BR\Microsoft.VisualStudio.GraphModel.resources.dll
+E:\Repository\BrinksTemplate\BrinksTemplate.Wizard\obj\Debug\BrinksTemplate.Wizard.csprojAssemblyReference.cache
 E:\Repository\BrinksTemplate\BrinksTemplate.Wizard\obj\Debug\OptionsForm.g.cs
 E:\Repository\BrinksTemplate\BrinksTemplate.Wizard\obj\Debug\BrinksTemplate.Wizard_MarkupCompile.cache
 E:\Repository\BrinksTemplate\BrinksTemplate.Wizard\obj\Debug\BrinksTemplate.Wizard_MarkupCompile.lref

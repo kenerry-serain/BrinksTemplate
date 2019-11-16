@@ -1,6 +1,7 @@
 ﻿using $DomainServicesInterfaceNamespace$;
 using $DomainCommandsNamespace$.$EntityName$;
 using $DomainQueriesNamespace$.$EntityName$;
+using $DomainFiltersNamespace$.$EntityName$;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -31,6 +32,21 @@ namespace $APIControllersNamespace$
             var _$LowerEntityName$QueryCollection = await _$LowerEntityName$Service.GetAllAsync().ConfigureAwait(false);
             if (_$LowerEntityName$QueryCollection.Count() > 0)
                 return Ok(_$LowerEntityName$QueryCollection);
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Seleciona uma lista de $EntityName$ a partir do filtro
+        /// </summary>
+        /// <param name="filterParams"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] FilterParams<$EntityName$Filter> $LowerEntityName$Filter)
+        {
+            var (_$LowerEntityName$QueryCollection, totalCount) = await _$LowerEntityName$Service.FindAsync(filterParams).ConfigureAwait(false);
+            if (_$LowerEntityName$QueryCollection.Count() > 0)
+                return Ok(new { _$LowerEntityName$QueryCollection, totalCount });
 
             return NoContent();
         }

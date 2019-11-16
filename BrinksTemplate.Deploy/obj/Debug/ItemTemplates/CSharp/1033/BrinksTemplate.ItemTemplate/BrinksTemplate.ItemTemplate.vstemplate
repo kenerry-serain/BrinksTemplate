@@ -18,6 +18,7 @@
     <ProjectItem SubType="code" TargetFileName="temp/I$EntityName$ReadOnlyRepository.cs" ReplaceParameters="true">SDomain\SAbstractions\SRepositories\IEntityReadOnlyRepository.cs</ProjectItem>
     <ProjectItem SubType="code" TargetFileName="temp/I$EntityName$Repository.cs" ReplaceParameters="true">SDomain\SAbstractions\SRepositories\IEntityRepository.cs</ProjectItem>
     <ProjectItem SubType="code" TargetFileName="temp/I$EntityName$Service.cs" ReplaceParameters="true">SDomain\SAbstractions\SServices\IEntityService.cs</ProjectItem>
+    <ProjectItem SubType="code" TargetFileName="temp/$EntityName$Filter.cs" ReplaceParameters="true">SDomain\SDTOs\SFilters\EntityFilter.cs</ProjectItem>
     <ProjectItem SubType="code" TargetFileName="temp/Register$EntityName$Command.cs" ReplaceParameters="true">SDomain\SDTOs\SCommands\RegisterEntityCommand.cs</ProjectItem>
     <ProjectItem SubType="code" TargetFileName="temp/Update$EntityName$Command.cs" ReplaceParameters="true">SDomain\SDTOs\SCommands\UpdateEntityCommand.cs</ProjectItem>
     <ProjectItem SubType="code" TargetFileName="temp/Remove$EntityName$Command.cs" ReplaceParameters="true">SDomain\SDTOs\SCommands\RemoveEntityCommand.cs</ProjectItem>

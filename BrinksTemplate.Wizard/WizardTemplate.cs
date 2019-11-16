@@ -20,6 +20,8 @@ namespace BrinksTemplate.Wizard
         , _domainProjectName
         , _solutionName
         , _entityQuery
+        , _entityMap
+        , _entityFilter
         , _entityServiceInterface
         , _entityService
         , _entityRepositoryInterface
@@ -101,6 +103,14 @@ namespace BrinksTemplate.Wizard
                 _domainProject = project;
             }
 
+            /* Domain filter*/
+            else if (item == _entityFilter)
+            {
+                project = GetProjectByName(_domainProjectName);
+                folder = $"DTOs.Filters.{_entityName}";
+                _domainProject = project;
+            }
+
             /* Domain commands validation */
             else if (commandValidatorCollection.Contains(item))
             {
@@ -134,7 +144,7 @@ namespace BrinksTemplate.Wizard
             }
 
             /* Domain map */
-            else if (item == $"{_entityName}Map")
+            else if (item == _entityMap)
             {
                 project = GetProjectByName(_domainProjectName);
                 folder = "Data.Mappings";
@@ -171,7 +181,9 @@ namespace BrinksTemplate.Wizard
                 $"Remove{_entityName}CommandValidator"
             };
 
+            _entityMap = $"{_entityName}Map";
             _entityQuery = $"{_entityName}Query";
+            _entityFilter = $"{_entityName}Filter";
             _entityRepositoryInterface = $"I{_entityName}Repository";
             _entityReadOnlyRepositoryInterface = $"I{_entityName}ReadOnlyRepository";
             _entityServiceInterface = $"I{_entityName}Service";
@@ -219,6 +231,7 @@ namespace BrinksTemplate.Wizard
 
             IoCConfig();
             AutoMapperConfig();
+            ContextConfig();
             //ContextConfig();
             //CreateEntity();
         }
@@ -260,11 +273,29 @@ namespace BrinksTemplate.Wizard
             var applicationModuleDirectory = string.Concat(directory, folderName, applicationModuleName);
             var applicationModuleLines = File.ReadAllLines(applicationModuleDirectory);
             var alreadyWritedMap = false;
+            var alreadyWritedUsing = false;
+            var domainServiceNamespace = $"using {_replacementsDictionary["$DomainServicesNamespace$"]}.{_entityName};";
+            var domainServiceInterfaceNamespace = $"using {_replacementsDictionary["$DomainServicesInterfaceNamespace$"]}.{_entityName};";
             using (var writer = new StreamWriter(applicationModuleDirectory))
             {
                 for (int currentLine = 1; currentLine <= applicationModuleLines.Count(); ++currentLine)
                 {
                     var alreadyWritedDefaultLine = false;
+                    if (!alreadyWritedUsing)
+                    {
+                        if (!applicationModuleLines.Contains(domainServiceNamespace) && !applicationModuleLines.Contains(domainServiceNamespace))
+                        {
+                            if (applicationModuleLines[currentLine - 1].Contains("using"))
+                            {
+                                writer.WriteLine($"{domainServiceNamespace}");
+                                writer.WriteLine($"{domainServiceInterfaceNamespace}");
+                                writer.WriteLine(applicationModuleLines[currentLine - 1]);
+                                alreadyWritedUsing = true;
+                                alreadyWritedDefaultLine = true;
+                            }
+                        }
+                    }
+
                     if (!alreadyWritedMap && currentLine >= 3)
                     {
                         if (currentLine >= 3 && applicationModuleLines[currentLine - 3].Contains("Load(ContainerBuilder"))
@@ -289,15 +320,12 @@ namespace BrinksTemplate.Wizard
         {
             var folderName = "\\AutofacModules";
             var applicationModuleName = "\\ValidatorModule.cs";
+            bool alreadyWritedUsing = false, alreadyWritedMap = false;
             var directory = _webApiProject.FullName.Substring(0, _webApiProject.FullName.LastIndexOf('\\'));
             var validatorModuleDirectory = string.Concat(directory, folderName, applicationModuleName);
             var validatorModuleLines = File.ReadAllLines(validatorModuleDirectory);
-            var alreadyWritedUsing = false;
-            var alreadyWritedMap = false;
-            var domainCommandNamespace = _replacementsDictionary["$DomainCommandsNamespace$"];
-            var domainCommandValidationNamespace = _replacementsDictionary["$DomainCommandValidationNamespace$"];
-            var entityCommandValidationNamespace = $"using {domainCommandValidationNamespace}.{_entityName};";
-            var entityCommandNamespace = $"using {domainCommandNamespace}.{_entityName};";
+            var entityCommandValidationNamespace = $"using {_replacementsDictionary["$DomainCommandValidationNamespace$"]}.{_entityName};";
+            var entityCommandNamespace = $"using {_replacementsDictionary["$DomainCommandsNamespace$"]}.{_entityName};";
             using (var writer = new StreamWriter(validatorModuleDirectory))
             {
                 for (int currentLine = 1; currentLine <= validatorModuleLines.Count(); ++currentLine)
@@ -311,7 +339,6 @@ namespace BrinksTemplate.Wizard
                             {
                                 writer.WriteLine($"{entityCommandValidationNamespace}");
                                 writer.WriteLine($"{entityCommandNamespace}");
-                                writer.WriteLine(validatorModuleLines[currentLine - 1]);
                                 alreadyWritedUsing = true;
                                 alreadyWritedDefaultLine = true;
                             }
@@ -327,7 +354,6 @@ namespace BrinksTemplate.Wizard
                                 var commandValidator = commandValidatorCollection.FirstOrDefault(validator => validator.Equals($"{command}Validator"));
                                 writer.WriteLine($"\t\t\tbuilder.RegisterType<{commandValidator}>().As<IValidator<{command}>>();");
                             }
-                            writer.WriteLine(validatorModuleLines[currentLine - 1]);
                             alreadyWritedDefaultLine = true;
                             alreadyWritedMap = true;
                         }
@@ -346,22 +372,61 @@ namespace BrinksTemplate.Wizard
         {
             var folderName = "\\AutofacModules";
             var infraModuleName = "\\InfraModule.cs";
+            bool alreadyWritedMap = false, alreadyWritedRepositoryUsing = false, alreadyWritedReadOnlyRepositoryUsing = false;
             var directory = _webApiProject.FullName.Substring(0, _webApiProject.FullName.LastIndexOf('\\'));
             var infraModuleDirectory = string.Concat(directory, folderName, infraModuleName);
             var infraModuleLines = File.ReadAllLines(infraModuleDirectory);
-            var alreadyWritedMap = false;
+            var domainReadOnlyRepositoryNamespace = $"using {_replacementsDictionary["$DomainReadOnlyRepositoriesNamespace$"]}.{_entityName};";
+            var domainReadOnlyRepositoryInterfaceNamespace = $"using {_replacementsDictionary["$DomainReadOnlyRepositoriesInterfaceNamespace$"]}.{_entityName};";
+            var domainRepositoriesInterfaceNamespace= $"using {_replacementsDictionary["$DomainRepositoriesInterfaceNamespace$"]}.{_entityName};";
+            var domainRepositoriesNamespace = $"using {_replacementsDictionary["$DomainRepositoriesNamespace$"]}.{_entityName};";
             using (var writer = new StreamWriter(infraModuleDirectory))
             {
                 for (int currentLine = 1; currentLine <= infraModuleLines.Count(); ++currentLine)
                 {
                     var alreadyWritedDefaultLine = false;
+                    if (!alreadyWritedRepositoryUsing)
+                    {
+                        if (!infraModuleLines.Contains(domainRepositoriesNamespace) && !infraModuleLines.Contains(domainRepositoriesInterfaceNamespace))
+                        {
+                            if (infraModuleLines[currentLine - 1].Contains("using"))
+                            {
+                                writer.WriteLine($"{domainRepositoriesNamespace}");
+                                writer.WriteLine($"{domainRepositoriesInterfaceNamespace}");
+                                
+                                if (!alreadyWritedDefaultLine)
+                                    writer.WriteLine(infraModuleLines[currentLine - 1]);
+
+                                alreadyWritedRepositoryUsing = true;
+                                alreadyWritedDefaultLine = true;
+                            }
+                        }
+                    }
+
+                    if (!alreadyWritedReadOnlyRepositoryUsing)
+                    {
+                        if (!infraModuleLines.Contains(domainReadOnlyRepositoryNamespace) && !infraModuleLines.Contains(domainReadOnlyRepositoryInterfaceNamespace))
+                        {
+                            if (infraModuleLines[currentLine - 1].Contains("using"))
+                            {
+                                writer.WriteLine($"{domainReadOnlyRepositoryNamespace}");
+                                writer.WriteLine($"{domainReadOnlyRepositoryInterfaceNamespace}");
+                                
+                                if (!alreadyWritedDefaultLine)
+                                    writer.WriteLine(infraModuleLines[currentLine - 1]);
+
+                                alreadyWritedReadOnlyRepositoryUsing = true;
+                                alreadyWritedDefaultLine = true;
+                            }
+                        }
+                    }
+
                     if (!alreadyWritedMap && currentLine >= 3)
                     {
                         if (infraModuleLines[currentLine - 3].Contains("Load(ContainerBuilder"))
                         {
                             writer.WriteLine($"\t\t\tbuilder.RegisterType<{_entityRepositoryInterface}>().As<{_entityRepository}>();");
                             writer.WriteLine($"\t\t\tbuilder.RegisterType<{_entityReadOnlyRepositoryInterface}>().As<{_entityReadOnlyRepository}>();");
-                            writer.WriteLine(infraModuleLines[currentLine - 1]);
                             alreadyWritedDefaultLine = true;
                             alreadyWritedMap = true;
                         }
@@ -379,23 +444,65 @@ namespace BrinksTemplate.Wizard
         private void ContextConfig()
         {
             var folderName = "\\Data\\Contexts";
-            var context = "\\OccurrenceDbContext.cs";
-            var directory = Directory.GetDirectories(_partialSolutionDirectory).FirstOrDefault(dir => dir.EndsWith(_webApiProjectName));
-            var infraModuleDirectory = string.Concat(directory, folderName, context);
-            var infraModuleLines = File.ReadAllLines(infraModuleDirectory);
+            bool alreadyWritedMap = false, alreadyWritedDbSet = false, alreadyWritedUsing = false;
+            var dbContextNameCollection = new[] { 
+                $"\\{_domainProjectName.Split('.')[_domainProjectName.Length - 2]}DbContext.cs",
+                $"\\{_domainProjectName.Split('.')[_domainProjectName.Length - 2]}ReadOnlyDbContext.cs"
+            };
 
-            using (var writer = new StreamWriter(infraModuleDirectory))
+            foreach (var dbContext in dbContextNameCollection)
             {
-                for (int currentLine = 1; currentLine <= infraModuleLines.Count(); ++currentLine)
+                var directory = _domainProject.FullName.Substring(0, _domainProject.FullName.LastIndexOf('\\'));
+                var contextDirectory = string.Concat(directory, folderName, dbContext);
+                var dbContextLines = File.ReadAllLines(contextDirectory);
+
+                using (var writer = new StreamWriter(contextDirectory))
                 {
-                    if (infraModuleLines[currentLine - 1].Contains("();"))
+                    var dataMappingNamespace = $"using {_replacementsDictionary["$DomainDataMappingNamespace$"]};";
+                    var domainEntityNamespace = $"using {_replacementsDictionary["DomainEntitiesNamespace"]};";
+                    for (int currentLine = 1; currentLine <= dbContextLines.Count(); ++currentLine)
                     {
-                        writer.WriteLine($"\t\tbuilder.RegisterType<{_entityRepositoryInterface}>().As<{_entityRepository}>();");
-                        writer.WriteLine($"\t\tbuilder.RegisterType<{_entityReadOnlyRepositoryInterface}>().As<{_entityReadOnlyRepository}>();");
-                        writer.WriteLine(infraModuleLines[currentLine - 1]);
+                        var alreadyWritedDefaultLine = false;
+                        if (!alreadyWritedUsing)
+                        {
+                            if (!dbContextLines.Contains(dataMappingNamespace) && !dbContextLines.Contains(domainEntityNamespace))
+                            {
+                                if (dbContextLines[currentLine - 1].Contains("using"))
+                                {
+                                    writer.WriteLine($"{dataMappingNamespace}");
+                                    writer.WriteLine($"{domainEntityNamespace}");
+                                    writer.WriteLine(dbContextLines[currentLine - 1]);
+                                    alreadyWritedUsing = true;
+                                    alreadyWritedDefaultLine = true;
+                                }
+                            }
+                        }
+
+                        if (!alreadyWritedMap)
+                        {
+                            if (dbContextLines[currentLine - 3].Contains("OnModelCreating(ModelBuilder"))
+                            {
+                                writer.WriteLine($"\t\t\tmodelBuilder.ApplyConfiguration(new {_entityMap}());");
+                                writer.WriteLine(dbContextLines[currentLine - 1]);
+                                alreadyWritedMap = true;
+                                alreadyWritedDefaultLine = true;
+                            }
+                        }
+
+                        if (!alreadyWritedDbSet)
+                        {
+                            if (dbContextLines[currentLine - 1].Contains("DbSet"))
+                            {
+                                writer.WriteLine(string.Concat($"\t\t\tpublic DbSet<Entities.{_entityName}> $EntityName$s", " { get; set; }"));
+                                writer.WriteLine(dbContextLines[currentLine - 1]);
+                                alreadyWritedDbSet = true;
+                                alreadyWritedDefaultLine = true;
+                            }
+                        }
+
+                        if (!alreadyWritedDefaultLine)
+                            writer.WriteLine(dbContextLines[currentLine - 1]);
                     }
-                    else
-                        writer.WriteLine(infraModuleLines[currentLine - 1]);
                 }
             }
         }
@@ -414,18 +521,19 @@ namespace BrinksTemplate.Wizard
             var alreadyWritedUsing = false;
             using (var writer = new StreamWriter(mapperDirectory))
             {
-                var domainQueriesNamespace = _replacementsDictionary["$DomainQueriesNamespace$"];
-                var entityQueryNamespace = $"using {domainQueriesNamespace}.{_entityName};";
+                var entityQueryNamespace = $"using {_replacementsDictionary["$DomainQueriesNamespace$"]}.{_entityName};";
+                var entityFilterNamespace = $"using {_replacementsDictionary["$DomainFiltersNamespace$"]}.{_entityName};";
                 for (int currentLine = 1; currentLine <= domainToQueryProfileLines.Count(); ++currentLine)
                 {
                     var alreadyWritedDefaultLine = false;
                     if (!alreadyWritedUsing)
                     {
-                        if (!domainToQueryProfileLines.Contains(entityQueryNamespace))
+                        if (!domainToQueryProfileLines.Contains(entityQueryNamespace) && !domainToQueryProfileLines.Contains(entityFilterNamespace))
                         {
                             if (domainToQueryProfileLines[currentLine - 1].Contains("using"))
                             {
                                 writer.WriteLine($"{entityQueryNamespace}");
+                                writer.WriteLine($"{entityFilterNamespace}");
                                 writer.WriteLine(domainToQueryProfileLines[currentLine - 1]);
                                 alreadyWritedUsing = true;
                                 alreadyWritedDefaultLine = true;
@@ -438,6 +546,7 @@ namespace BrinksTemplate.Wizard
                         if (domainToQueryProfileLines[currentLine - 3].Contains("DomainToQueryProfile()"))
                         {
                             writer.WriteLine($"\t\t\tCreateMap<{_entityName}, {_entityQuery}>();");
+                            writer.WriteLine($"\t\t\tCreateMap<{_entityName}, {_entityFilter}>();");
                             writer.WriteLine(domainToQueryProfileLines[currentLine - 1]);
                             alreadyWritedMap = true;
                             alreadyWritedDefaultLine = true;
@@ -541,6 +650,8 @@ namespace BrinksTemplate.Wizard
             replacementsDictionary.Add("$DomainRepositoriesInterfaceNamespace$", $"{_domainProjectName}.Abstractions.Repositories");
             replacementsDictionary.Add("$DomainReadOnlyRepositoriesInterfaceNamespace$", $"{_domainProjectName}.Abstractions.Repositories.ReadOnly");
             replacementsDictionary.Add("$DomainCommandsNamespace$", $"{_domainProjectName}.DTOs.Commands");
+            replacementsDictionary.Add("$DomainFiltersNamespace$", $"{_domainProjectName}.DTOs.Filters");
+            
             replacementsDictionary.Add("$DomainQueriesNamespace$", $"{_domainProjectName}.DTOs.Queries");
             replacementsDictionary.Add("$DomainEntitiesNamespace$", $"{_domainProjectName}.Entities");
             replacementsDictionary.Add("$DomainMappersNamespace$", $"{_domainProjectName}.Mappers");

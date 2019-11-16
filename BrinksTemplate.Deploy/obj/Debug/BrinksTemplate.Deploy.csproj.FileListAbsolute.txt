@@ -26,6 +26,7 @@ E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CShar
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate\SDomain\SAbstractions\SRepositories\IEntityReadOnlyRepository.cs
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate\SDomain\SAbstractions\SRepositories\IEntityRepository.cs
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate\SDomain\SAbstractions\SServices\IEntityService.cs
+E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate\SDomain\SDTOs\SFilters\EntityFilter.cs
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate\SDomain\SDTOs\SCommands\RegisterEntityCommand.cs
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate\SDomain\SDTOs\SCommands\UpdateEntityCommand.cs
 E:\Repository\BrinksTemplate\BrinksTemplate.Deploy\obj\Debug\ItemTemplates\CSharp\1033\BrinksTemplate.ItemTemplate\SDomain\SDTOs\SCommands\RemoveEntityCommand.cs

@@ -4,3 +4,4 @@ E:\Repository\BrinksTemplate\BrinksTemplate.ItemTemplate\obj\Debug\BrinksTemplat
 E:\Repository\BrinksTemplate\BrinksTemplate.ItemTemplate\obj\Debug\CSharp\1033\BrinksTemplate.ItemTemplate.zip
 E:\Repository\BrinksTemplate\BrinksTemplate.ItemTemplate\obj\Debug\BrinksTemplate.ItemTemplate.dll
 E:\Repository\BrinksTemplate\BrinksTemplate.ItemTemplate\obj\Debug\BrinksTemplate.ItemTemplate.pdb
+E:\Repository\BrinksTemplate\BrinksTemplate.ItemTemplate\obj\Debug\BrinksTemplate.ItemTemplate.csprojAssemblyReference.cache

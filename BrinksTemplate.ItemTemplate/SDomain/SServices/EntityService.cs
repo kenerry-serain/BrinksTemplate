@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using $DomainFiltersNamespace$.$EntityName$;
 using $DomainCoreExceptionsNamespace$;
 using $DomainCoreServicesNamespace$;
 using $DomainRepositoriesInterfaceNamespace$;
@@ -46,7 +47,7 @@ namespace $DomainServicesNamespace$
         }
 
         /// <summary>
-        /// Obtem paginado todos os registro da entidade $entityName$.
+        /// Obtem todos os registro da entidade $entityName$.
         /// </summary>
         /// <param name="paginaAtual"></param>
         /// <param name="totalPorPagina"></param>
@@ -55,6 +56,18 @@ namespace $DomainServicesNamespace$
         {
             var $LowerEntityName$Collection = await _readRepository.GetAllAsync().ConfigureAwait(false);
             var $LowerEntityName$QueryCollection = _mapper.Map<IEnumerable<$EntityName$Query>>($LowerEntityName$Collection);
+            return $LowerEntityName$QueryCollection;
+        }
+        
+        /// <summary>
+        /// Obtem todos os registro da entidade $entityName$ a partir do filtro.
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        public async Task<(IEnumerable<Entities.$EntityName$Query> $LowerEntityName$collection, int totalCount)> FindAsync(FilterParams<$EntityName$Filter> $LowerEntityName$filter)
+        {
+            var $LowerEntityName$Collection =await _readRepository.FindAsync($LowerEntityName$Collection).ConfigureAwait(false);
+            var $LowerEntityName$QueryCollection = _mapper.Map<IEnumerable<$EntityName$Query>> ($LowerEntityName$Collection);
             return $LowerEntityName$QueryCollection;
         }
 

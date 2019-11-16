@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="SDomain\SDTOs\SFilters\EntityFilter.cs" />
     <None Include="SAPI\SController\EntityController.cs" />
     <None Include="SDomain\SData\SRepositories\EntityRepository.cs" />
     <None Include="SDomain\SData\SRepositories\SReadOnly\EntityReadOnlyRepository.cs" />
