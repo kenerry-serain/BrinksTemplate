@@ -2,10 +2,12 @@
 using $DomainCommandsNamespace$.$EntityName$;
 using $DomainQueriesNamespace$.$EntityName$;
 using $DomainFiltersNamespace$.$EntityName$;
+using $CoreSharedKernelNamespace$;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace $APIControllersNamespace$
 {
@@ -16,10 +18,10 @@ namespace $APIControllersNamespace$
         private readonly I$EntityName$Service _$LowerEntityName$Service;
         public $EntityName$Controller
         (
-            I$EntityName$Service _$LowerEntityName$Service
+            I$EntityName$Service $LowerEntityName$Service
         )
         {
-            _$LowerEntityName$Service = _$LowerEntityName$Service ?? throw new ArgumentNullException(nameof(_$LowerEntityName$Service));
+            _$LowerEntityName$Service = $LowerEntityName$Service ?? throw new ArgumentNullException(nameof(_$LowerEntityName$Service));
         }
 
         /// <summary>
@@ -29,9 +31,9 @@ namespace $APIControllersNamespace$
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            var _$LowerEntityName$QueryCollection = await _$LowerEntityName$Service.GetAllAsync().ConfigureAwait(false);
-            if (_$LowerEntityName$QueryCollection.Count() > 0)
-                return Ok(_$LowerEntityName$QueryCollection);
+            var $LowerEntityName$QueryCollection = await _$LowerEntityName$Service.GetAllAsync().ConfigureAwait(false);
+            if ($LowerEntityName$QueryCollection.Count() > 0)
+                return Ok($LowerEntityName$QueryCollection);
 
             return NoContent();
         }
@@ -44,9 +46,9 @@ namespace $APIControllersNamespace$
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] FilterParams<$EntityName$Filter> $LowerEntityName$Filter)
         {
-            var (_$LowerEntityName$QueryCollection, totalCount) = await _$LowerEntityName$Service.FindAsync(filterParams).ConfigureAwait(false);
-            if (_$LowerEntityName$QueryCollection.Count() > 0)
-                return Ok(new { _$LowerEntityName$QueryCollection, totalCount });
+            var ($LowerEntityName$QueryCollection, totalCount) = await _$LowerEntityName$Service.FindAsync($LowerEntityName$Filter, CancellationToken.None).ConfigureAwait(false);
+            if (totalCount > 0)
+                return Ok(new { $LowerEntityName$QueryCollection, totalCount });
 
             return NoContent();
         }
@@ -60,8 +62,8 @@ namespace $APIControllersNamespace$
         [Route("{id}")]
         public async Task<IActionResult> GetByIdAsync([FromRoute]int id)
         {
-            var _$LowerEntityName$Query = await _$LowerEntityName$Service.GetByIdAsync(id).ConfigureAwait(false);
-            if (_$LowerEntityName$Query == default($EntityName$Query))
+            var $LowerEntityName$Query = await _$LowerEntityName$Service.GetByIdAsync(id).ConfigureAwait(false);
+            if ($LowerEntityName$Query == default($EntityName$Query))
                 return NotFound();
             return Ok();
         }

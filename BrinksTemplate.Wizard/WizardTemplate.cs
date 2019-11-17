@@ -215,7 +215,6 @@ namespace BrinksTemplate.Wizard
             _entityName = replacementsDictionary["$safeitemname$"];
             _entityName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(_entityName);
 
-            //_contextName = GetContextName();
             SetParameters(replacementsDictionary);
             _replacementsDictionary = replacementsDictionary;
         }
@@ -274,8 +273,8 @@ namespace BrinksTemplate.Wizard
             var applicationModuleLines = File.ReadAllLines(applicationModuleDirectory);
             var alreadyWritedMap = false;
             var alreadyWritedUsing = false;
-            var domainServiceNamespace = $"using {_replacementsDictionary["$DomainServicesNamespace$"]}.{_entityName};";
-            var domainServiceInterfaceNamespace = $"using {_replacementsDictionary["$DomainServicesInterfaceNamespace$"]}.{_entityName};";
+            var domainServiceNamespace = $"using {_replacementsDictionary["$DomainServicesNamespace$"]};";
+            var domainServiceInterfaceNamespace = $"using {_replacementsDictionary["$DomainServicesInterfaceNamespace$"]};";
             using (var writer = new StreamWriter(applicationModuleDirectory))
             {
                 for (int currentLine = 1; currentLine <= applicationModuleLines.Count(); ++currentLine)
@@ -339,6 +338,7 @@ namespace BrinksTemplate.Wizard
                             {
                                 writer.WriteLine($"{entityCommandValidationNamespace}");
                                 writer.WriteLine($"{entityCommandNamespace}");
+                                writer.WriteLine(validatorModuleLines[currentLine - 1]);
                                 alreadyWritedUsing = true;
                                 alreadyWritedDefaultLine = true;
                             }
@@ -354,6 +354,7 @@ namespace BrinksTemplate.Wizard
                                 var commandValidator = commandValidatorCollection.FirstOrDefault(validator => validator.Equals($"{command}Validator"));
                                 writer.WriteLine($"\t\t\tbuilder.RegisterType<{commandValidator}>().As<IValidator<{command}>>();");
                             }
+                            writer.WriteLine(validatorModuleLines[currentLine - 1]);
                             alreadyWritedDefaultLine = true;
                             alreadyWritedMap = true;
                         }
@@ -376,10 +377,10 @@ namespace BrinksTemplate.Wizard
             var directory = _webApiProject.FullName.Substring(0, _webApiProject.FullName.LastIndexOf('\\'));
             var infraModuleDirectory = string.Concat(directory, folderName, infraModuleName);
             var infraModuleLines = File.ReadAllLines(infraModuleDirectory);
-            var domainReadOnlyRepositoryNamespace = $"using {_replacementsDictionary["$DomainReadOnlyRepositoriesNamespace$"]}.{_entityName};";
-            var domainReadOnlyRepositoryInterfaceNamespace = $"using {_replacementsDictionary["$DomainReadOnlyRepositoriesInterfaceNamespace$"]}.{_entityName};";
-            var domainRepositoriesInterfaceNamespace= $"using {_replacementsDictionary["$DomainRepositoriesInterfaceNamespace$"]}.{_entityName};";
-            var domainRepositoriesNamespace = $"using {_replacementsDictionary["$DomainRepositoriesNamespace$"]}.{_entityName};";
+            var domainReadOnlyRepositoryNamespace = $"using {_replacementsDictionary["$DomainReadOnlyRepositoriesNamespace$"]};";
+            var domainReadOnlyRepositoryInterfaceNamespace = $"using {_replacementsDictionary["$DomainReadOnlyRepositoriesInterfaceNamespace$"]};";
+            var domainRepositoriesInterfaceNamespace= $"using {_replacementsDictionary["$DomainRepositoriesInterfaceNamespace$"]};";
+            var domainRepositoriesNamespace = $"using {_replacementsDictionary["$DomainRepositoriesNamespace$"]};";
             using (var writer = new StreamWriter(infraModuleDirectory))
             {
                 for (int currentLine = 1; currentLine <= infraModuleLines.Count(); ++currentLine)
@@ -446,8 +447,8 @@ namespace BrinksTemplate.Wizard
             var folderName = "\\Data\\Contexts";
             bool alreadyWritedMap = false, alreadyWritedDbSet = false, alreadyWritedUsing = false;
             var dbContextNameCollection = new[] { 
-                $"\\{_domainProjectName.Split('.')[_domainProjectName.Length - 2]}DbContext.cs",
-                $"\\{_domainProjectName.Split('.')[_domainProjectName.Length - 2]}ReadOnlyDbContext.cs"
+                $"\\{_domainProjectName.Split('.')[_domainProjectName.Split('.').Length - 2]}DbContext.cs",
+                $"\\{_domainProjectName.Split('.')[_domainProjectName.Split('.').Length - 2]}ReadOnlyDbContext.cs"
             };
 
             foreach (var dbContext in dbContextNameCollection)
@@ -459,7 +460,7 @@ namespace BrinksTemplate.Wizard
                 using (var writer = new StreamWriter(contextDirectory))
                 {
                     var dataMappingNamespace = $"using {_replacementsDictionary["$DomainDataMappingNamespace$"]};";
-                    var domainEntityNamespace = $"using {_replacementsDictionary["DomainEntitiesNamespace"]};";
+                    var domainEntityNamespace = $"using {_replacementsDictionary["$DomainEntitiesNamespace$"]};";
                     for (int currentLine = 1; currentLine <= dbContextLines.Count(); ++currentLine)
                     {
                         var alreadyWritedDefaultLine = false;
@@ -478,7 +479,7 @@ namespace BrinksTemplate.Wizard
                             }
                         }
 
-                        if (!alreadyWritedMap)
+                        if (!alreadyWritedMap && currentLine>=3)
                         {
                             if (dbContextLines[currentLine - 3].Contains("OnModelCreating(ModelBuilder"))
                             {
@@ -493,7 +494,7 @@ namespace BrinksTemplate.Wizard
                         {
                             if (dbContextLines[currentLine - 1].Contains("DbSet"))
                             {
-                                writer.WriteLine(string.Concat($"\t\t\tpublic DbSet<Entities.{_entityName}> $EntityName$s", " { get; set; }"));
+                                writer.WriteLine(string.Concat($"\t\tpublic DbSet<Entities.{_entityName}> {_entityName}s", " { get; set; }"));
                                 writer.WriteLine(dbContextLines[currentLine - 1]);
                                 alreadyWritedDbSet = true;
                                 alreadyWritedDefaultLine = true;
@@ -546,7 +547,6 @@ namespace BrinksTemplate.Wizard
                         if (domainToQueryProfileLines[currentLine - 3].Contains("DomainToQueryProfile()"))
                         {
                             writer.WriteLine($"\t\t\tCreateMap<{_entityName}, {_entityQuery}>();");
-                            writer.WriteLine($"\t\t\tCreateMap<{_entityName}, {_entityFilter}>();");
                             writer.WriteLine(domainToQueryProfileLines[currentLine - 1]);
                             alreadyWritedMap = true;
                             alreadyWritedDefaultLine = true;
@@ -657,7 +657,7 @@ namespace BrinksTemplate.Wizard
             replacementsDictionary.Add("$DomainMappersNamespace$", $"{_domainProjectName}.Mappers");
             replacementsDictionary.Add("$DomainCommandValidationNamespace$", $"{_domainProjectName}.Services.Validations");
             replacementsDictionary.Add("$DomainContextsNamespace$", $"{_domainProjectName}.Data.Contexts");
-            replacementsDictionary.Add("$DomainDataMappingNamespace$", $"{_domainProjectName}.Data.Mapping");
+            replacementsDictionary.Add("$DomainDataMappingNamespace$", $"{_domainProjectName}.Data.Mappings");
             replacementsDictionary.Add("$DomainRepositoriesNamespace$", $"{_domainProjectName}.Data.Repositories");
             replacementsDictionary.Add("$DomainReadOnlyRepositoriesNamespace$", $"{_domainProjectName}.Data.Repositories.ReadOnly");
             replacementsDictionary.Add("$DomainCoreNamespace$", $"{_solutionName}.Core.Domain");

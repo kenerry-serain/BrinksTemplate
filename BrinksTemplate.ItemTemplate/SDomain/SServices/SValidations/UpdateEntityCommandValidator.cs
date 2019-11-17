@@ -3,7 +3,7 @@ using $InfrastructureLocalizationNamespace$;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Brinks.Compusafe.Occurrence.Domain.Services.Validations.$EntityName$
+namespace $DomainCommandValidationNamespace$.$EntityName$
 {
     /// <summary>
     /// Classe para implementação de validações e regras de negócio do comando Update$EntityName$CommandValidator

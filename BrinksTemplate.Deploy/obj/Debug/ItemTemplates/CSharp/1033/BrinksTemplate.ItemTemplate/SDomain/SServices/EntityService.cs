@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using $CoreSharedKernelNamespace$;
 using $DomainFiltersNamespace$.$EntityName$;
 using $DomainCoreExceptionsNamespace$;
 using $DomainCoreServicesNamespace$;
@@ -64,11 +66,11 @@ namespace $DomainServicesNamespace$
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
-        public async Task<(IEnumerable<Entities.$EntityName$Query> $LowerEntityName$collection, int totalCount)> FindAsync(FilterParams<$EntityName$Filter> $LowerEntityName$filter)
+        public async Task<(IEnumerable<$EntityName$Query> $LowerEntityName$collection, int totalCount)> FindAsync(FilterParams<$EntityName$Filter> $LowerEntityName$filter)
         {
-            var $LowerEntityName$Collection =await _readRepository.FindAsync($LowerEntityName$Collection).ConfigureAwait(false);
-            var $LowerEntityName$QueryCollection = _mapper.Map<IEnumerable<$EntityName$Query>> ($LowerEntityName$Collection);
-            return $LowerEntityName$QueryCollection;
+            var $LowerEntityName$Collection =await _readRepository.FindAsync($LowerEntityName$filter, CancellationToken.None).ConfigureAwait(false);
+            var $LowerEntityName$QueryCollection = _mapper.Map<IEnumerable<$EntityName$Query>>($LowerEntityName$Collection);
+            return ($LowerEntityName$QueryCollection, $LowerEntityName$QueryCollection.Count());
         }
 
         /// <summary>
