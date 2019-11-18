@@ -48,4 +48,3 @@ E:\Repository\BrinksTemplate\BrinksTemplate.Wizard\obj\Debug\BrinksTemplate.Wiza
 E:\Repository\BrinksTemplate\BrinksTemplate.Wizard\obj\Debug\BrinksTemplate.Wizard.csproj.CopyComplete
 E:\Repository\BrinksTemplate\BrinksTemplate.Wizard\obj\Debug\BrinksTemplate.Wizard.dll
 E:\Repository\BrinksTemplate\BrinksTemplate.Wizard\obj\Debug\BrinksTemplate.Wizard.pdb
-E:\Repository\BrinksTemplate\BrinksTemplate.Wizard\obj\Debug\BrinksTemplate.Wizard.csprojAssemblyReference.cache

@@ -25,30 +25,16 @@ namespace $APIControllersNamespace$
         }
 
         /// <summary>
-        /// Seleciona uma lista de $EntityName$.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
-        {
-            var $LowerEntityName$QueryCollection = await _$LowerEntityName$Service.GetAllAsync().ConfigureAwait(false);
-            if ($LowerEntityName$QueryCollection.Count() > 0)
-                return Ok($LowerEntityName$QueryCollection);
-
-            return NoContent();
-        }
-
-        /// <summary>
         /// Seleciona uma lista de $EntityName$ a partir do filtro
         /// </summary>
         /// <param name="filterParams"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] FilterParams<$EntityName$Filter> $LowerEntityName$Filter)
+        public async Task<IActionResult> GetAllAsync([FromQuery] FilterParams<$EntityName$Filter> $LowerEntityName$Filter)
         {
             var ($LowerEntityName$QueryCollection, totalCount) = await _$LowerEntityName$Service.FindAsync($LowerEntityName$Filter, CancellationToken.None).ConfigureAwait(false);
             if (totalCount > 0)
-                return Ok(new { $LowerEntityName$QueryCollection, totalCount });
+                return Ok(new { list= $LowerEntityName$QueryCollection, totalCount });
 
             return NoContent();
         }
@@ -65,7 +51,7 @@ namespace $APIControllersNamespace$
             var $LowerEntityName$Query = await _$LowerEntityName$Service.GetByIdAsync(id).ConfigureAwait(false);
             if ($LowerEntityName$Query == default($EntityName$Query))
                 return NotFound();
-            return Ok();
+            return Ok($LowerEntityName$Query);
         }
 
         /// <summary>
@@ -91,7 +77,7 @@ namespace $APIControllersNamespace$
             var updated$EntityName$Query = await _$LowerEntityName$Service.UpdateAsync(command).ConfigureAwait(false);
             if (updated$EntityName$Query == default($EntityName$Query))
                 return NotFound();
-            return Accepted();
+            return Accepted(updated$EntityName$Query);
         }
 
         /// <summary>
@@ -101,9 +87,9 @@ namespace $APIControllersNamespace$
         /// <returns></returns>
         [HttpDelete]
         [Route("{id}")]
-        public async Task<IActionResult> RemoveAsync([FromBody] Remove$EntityName$Command command)
+        public async Task<IActionResult> RemoveAsync([FromRoute] int id)
         {
-            var commandResult = await _$LowerEntityName$Service.RemoveAsync(command).ConfigureAwait(false);
+            var commandResult = await _$LowerEntityName$Service.RemoveAsync(new Remove$EntityName$Command(id)).ConfigureAwait(false);
             if (commandResult <= 0)
                 return NotFound();
             return Ok();

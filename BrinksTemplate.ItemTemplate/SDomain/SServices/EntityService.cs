@@ -129,7 +129,8 @@ namespace $DomainServicesNamespace$
             await _writeRepository.UnitOfWork.ExecuteInTransactionAsync(async cancellationToken =>
             {
                 await Task.Run(() => _writeRepository.Update($LowerEntityName$DataToUpdate)).ConfigureAwait(false);
-                await Commit(cancellationToken).ConfigureAwait(false); ;
+                await Commit(cancellationToken).ConfigureAwait(false); 
+                updated$EntityName$ = $LowerEntityName$DataToUpdate;
             }).ConfigureAwait(false);
 
             if (updated$EntityName$ != default($EntityName$))

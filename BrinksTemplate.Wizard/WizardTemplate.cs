@@ -299,7 +299,7 @@ namespace BrinksTemplate.Wizard
                     {
                         if (currentLine >= 3 && applicationModuleLines[currentLine - 3].Contains("Load(ContainerBuilder"))
                         {
-                            writer.WriteLine($"\t\t\tbuilder.RegisterType<{_entityServiceInterface}>().As<{_entityService}>();");
+                            writer.WriteLine($"\t\t\tbuilder.RegisterType<{_entityService}>().As<{_entityServiceInterface}>();");
                             writer.WriteLine(applicationModuleLines[currentLine - 1]);
                             alreadyWritedDefaultLine = true;
                             alreadyWritedMap = true;
@@ -426,8 +426,8 @@ namespace BrinksTemplate.Wizard
                     {
                         if (infraModuleLines[currentLine - 3].Contains("Load(ContainerBuilder"))
                         {
-                            writer.WriteLine($"\t\t\tbuilder.RegisterType<{_entityRepositoryInterface}>().As<{_entityRepository}>();");
-                            writer.WriteLine($"\t\t\tbuilder.RegisterType<{_entityReadOnlyRepositoryInterface}>().As<{_entityReadOnlyRepository}>();");
+                            writer.WriteLine($"\t\t\tbuilder.RegisterType<{_entityRepository}>().As<{_entityRepositoryInterface}>();");
+                            writer.WriteLine($"\t\t\tbuilder.RegisterType<{_entityReadOnlyRepository}>().As<{_entityReadOnlyRepositoryInterface}>();");
                             alreadyWritedDefaultLine = true;
                             alreadyWritedMap = true;
                         }
@@ -445,7 +445,6 @@ namespace BrinksTemplate.Wizard
         private void ContextConfig()
         {
             var folderName = "\\Data\\Contexts";
-            bool alreadyWritedMap = false, alreadyWritedDbSet = false, alreadyWritedUsing = false;
             var dbContextNameCollection = new[] { 
                 $"\\{_domainProjectName.Split('.')[_domainProjectName.Split('.').Length - 2]}DbContext.cs",
                 $"\\{_domainProjectName.Split('.')[_domainProjectName.Split('.').Length - 2]}ReadOnlyDbContext.cs"
@@ -456,7 +455,9 @@ namespace BrinksTemplate.Wizard
                 var directory = _domainProject.FullName.Substring(0, _domainProject.FullName.LastIndexOf('\\'));
                 var contextDirectory = string.Concat(directory, folderName, dbContext);
                 var dbContextLines = File.ReadAllLines(contextDirectory);
-
+                var alreadyWritedDbSet = false;
+                var alreadyWritedUsing = false;
+                var alreadyWritedMap = false;
                 using (var writer = new StreamWriter(contextDirectory))
                 {
                     var dataMappingNamespace = $"using {_replacementsDictionary["$DomainDataMappingNamespace$"]};";
