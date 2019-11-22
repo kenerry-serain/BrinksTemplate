@@ -32,7 +32,7 @@ namespace $APIControllersNamespace$
         [HttpGet]
         public async Task<IActionResult> GetAllAsync([FromQuery] FilterParams<$EntityName$Filter> $LowerEntityName$Filter)
         {
-            var ($LowerEntityName$QueryCollection, totalCount) = await _$LowerEntityName$Service.FindAsync($LowerEntityName$Filter, CancellationToken.None).ConfigureAwait(false);
+            var ($LowerEntityName$QueryCollection, totalCount) = await _$LowerEntityName$Service.GetAllAsync($LowerEntityName$Filter).ConfigureAwait(false);
             if (totalCount > 0)
                 return Ok(new { list= $LowerEntityName$QueryCollection, totalCount });
 

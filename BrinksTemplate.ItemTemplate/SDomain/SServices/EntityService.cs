@@ -19,7 +19,7 @@ using FluentValidation;
 namespace $DomainServicesNamespace$
 {
     /// <summary>
-    /// Serviços e validações da entidade $entityName$.
+    /// Serviços e validações da entidade $EntityName$.
     /// </summary>
     public class $EntityName$Service : Service<$EntityName$>, I$EntityName$Service
     {
@@ -47,34 +47,21 @@ namespace $DomainServicesNamespace$
             _updateValidator = updateValidator ?? throw new ArgumentNullException(nameof(updateValidator));
             _removeValidator = removeValidator ?? throw new ArgumentNullException(nameof(removeValidator));
         }
-
-        /// <summary>
-        /// Obtem todos os registro da entidade $entityName$.
-        /// </summary>
-        /// <param name="paginaAtual"></param>
-        /// <param name="totalPorPagina"></param>
-        /// <returns></returns>
-        public async Task<IEnumerable<$EntityName$Query>> GetAllAsync()
-        {
-            var $LowerEntityName$Collection = await _readRepository.GetAllAsync().ConfigureAwait(false);
-            var $LowerEntityName$QueryCollection = _mapper.Map<IEnumerable<$EntityName$Query>>($LowerEntityName$Collection);
-            return $LowerEntityName$QueryCollection;
-        }
         
         /// <summary>
-        /// Obtem todos os registro da entidade $entityName$ a partir do filtro.
+        /// Obtem todos os registro da entidade $EntityName$ a partir do filtro.
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
-        public async Task<(IEnumerable<$EntityName$Query> $LowerEntityName$collection, int totalCount)> FindAsync(FilterParams<$EntityName$Filter> $LowerEntityName$filter)
+        public async Task<(IEnumerable<$EntityName$Query> $LowerEntityName$collection, int totalCount)> GetAllAsync(FilterParams<$EntityName$Filter> $LowerEntityName$filter)
         {
-            var $LowerEntityName$Collection =await _readRepository.FindAsync($LowerEntityName$filter, CancellationToken.None).ConfigureAwait(false);
+            var ($LowerEntityName$Collection, count) =await _readRepository.FindAsync($LowerEntityName$filter, CancellationToken.None).ConfigureAwait(false);
             var $LowerEntityName$QueryCollection = _mapper.Map<IEnumerable<$EntityName$Query>>($LowerEntityName$Collection);
-            return ($LowerEntityName$QueryCollection, $LowerEntityName$QueryCollection.Count());
+            return ($LowerEntityName$QueryCollection, count);
         }
 
         /// <summary>
-        /// Obtem um registro por Id da entidade $entityName$.
+        /// Obtem um registro por Id da entidade $EntityName$.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -86,7 +73,7 @@ namespace $DomainServicesNamespace$
         }
 
         /// <summary>
-        /// Adiciona um registro da entidade $entityName$.
+        /// Adiciona um registro da entidade $EntityName$.
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
@@ -112,7 +99,7 @@ namespace $DomainServicesNamespace$
         }
 
         /// <summary>
-        /// Atualiza um registro da entidade $entityName$.
+        /// Atualiza um registro da entidade $EntityName$.
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
@@ -143,7 +130,7 @@ namespace $DomainServicesNamespace$
         }
 
         /// <summary>
-        /// Deleta um registro da entidade $entityName$.
+        /// Deleta um registro da entidade $EntityName$.
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
@@ -157,7 +144,8 @@ namespace $DomainServicesNamespace$
             await _writeRepository.UnitOfWork.ExecuteInTransactionAsync(async cancellationToken =>
             {
                 var $LowerEntityName$ToRemove = await _readOnlyRepository.GetByKeyAsync(command.Id).ConfigureAwait(false);
-                await Task.Run(() => _writeRepository.Remove($LowerEntityName$ToRemove)).ConfigureAwait(false);
+                $LowerEntityName$ToRemove.Delete();
+                await Task.Run(() => _writeRepository.Update($LowerEntityName$ToRemove)).ConfigureAwait(false);
                 await Commit(cancellationToken).ConfigureAwait(false);
             }).ConfigureAwait(false);
 
@@ -165,7 +153,7 @@ namespace $DomainServicesNamespace$
         }
 
         /// <summary>
-        /// Verifica se um registro da entidade $entityName$ existe.
+        /// Verifica se um registro da entidade $EntityName$ existe.
         /// </summary>
         /// <param name="$LowerEntityName$Id"></param>
         /// <returns></returns>

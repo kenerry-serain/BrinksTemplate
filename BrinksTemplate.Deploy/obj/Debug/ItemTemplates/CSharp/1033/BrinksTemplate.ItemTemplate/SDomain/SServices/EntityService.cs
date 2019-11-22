@@ -47,30 +47,17 @@ namespace $DomainServicesNamespace$
             _updateValidator = updateValidator ?? throw new ArgumentNullException(nameof(updateValidator));
             _removeValidator = removeValidator ?? throw new ArgumentNullException(nameof(removeValidator));
         }
-
-        /// <summary>
-        /// Obtem todos os registro da entidade $entityName$.
-        /// </summary>
-        /// <param name="paginaAtual"></param>
-        /// <param name="totalPorPagina"></param>
-        /// <returns></returns>
-        public async Task<IEnumerable<$EntityName$Query>> GetAllAsync()
-        {
-            var $LowerEntityName$Collection = await _readRepository.GetAllAsync().ConfigureAwait(false);
-            var $LowerEntityName$QueryCollection = _mapper.Map<IEnumerable<$EntityName$Query>>($LowerEntityName$Collection);
-            return $LowerEntityName$QueryCollection;
-        }
         
         /// <summary>
         /// Obtem todos os registro da entidade $entityName$ a partir do filtro.
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
-        public async Task<(IEnumerable<$EntityName$Query> $LowerEntityName$collection, int totalCount)> FindAsync(FilterParams<$EntityName$Filter> $LowerEntityName$filter)
+        public async Task<(IEnumerable<$EntityName$Query> $LowerEntityName$collection, int totalCount)> GetAllAsync(FilterParams<$EntityName$Filter> $LowerEntityName$filter)
         {
-            var $LowerEntityName$Collection =await _readRepository.FindAsync($LowerEntityName$filter, CancellationToken.None).ConfigureAwait(false);
+            var ($LowerEntityName$Collection, count) =await _readRepository.FindAsync($LowerEntityName$filter, CancellationToken.None).ConfigureAwait(false);
             var $LowerEntityName$QueryCollection = _mapper.Map<IEnumerable<$EntityName$Query>>($LowerEntityName$Collection);
-            return ($LowerEntityName$QueryCollection, $LowerEntityName$QueryCollection.Count());
+            return ($LowerEntityName$QueryCollection, count);
         }
 
         /// <summary>
@@ -157,7 +144,8 @@ namespace $DomainServicesNamespace$
             await _writeRepository.UnitOfWork.ExecuteInTransactionAsync(async cancellationToken =>
             {
                 var $LowerEntityName$ToRemove = await _readOnlyRepository.GetByKeyAsync(command.Id).ConfigureAwait(false);
-                await Task.Run(() => _writeRepository.Remove($LowerEntityName$ToRemove)).ConfigureAwait(false);
+                $LowerEntityName$ToRemove.Delete();
+                await Task.Run(() => _writeRepository.Update($LowerEntityName$ToRemove)).ConfigureAwait(false);
                 await Commit(cancellationToken).ConfigureAwait(false);
             }).ConfigureAwait(false);
 

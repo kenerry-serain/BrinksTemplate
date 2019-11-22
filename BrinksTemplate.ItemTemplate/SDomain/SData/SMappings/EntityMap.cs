@@ -20,6 +20,8 @@ namespace $DomainDataMappingNamespace$
             builder
                 .Property(p => p.CreationDate)
                 .HasColumnName("creation_date");
+
+            builder.HasQueryFilter(p => !p.IsDeleted);
         }
     }
 }

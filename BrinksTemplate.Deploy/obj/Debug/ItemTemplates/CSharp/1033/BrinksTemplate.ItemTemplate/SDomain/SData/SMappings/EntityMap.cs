@@ -11,15 +11,17 @@ namespace $DomainDataMappingNamespace$
     {
         public void Configure(EntityTypeBuilder<$EntityName$> builder)
         {
-            builder.ToTable("$EntityName$");
+            builder.ToTable("$LowerEntityName$");
 
             builder
                 .Property(p => p.Id)
                 .HasColumnName("id");
 
             builder
-            .Property(p => p.CreationDate)
-            .HasColumnName("creation_date");
+                .Property(p => p.CreationDate)
+                .HasColumnName("creation_date");
+
+            builder.HasQueryFilter(p => !p.IsDeleted);
         }
     }
 }

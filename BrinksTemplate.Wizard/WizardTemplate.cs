@@ -213,7 +213,7 @@ namespace BrinksTemplate.Wizard
             _domainProjectName = optionsForm.DomainProject;
 
             _entityName = replacementsDictionary["$safeitemname$"];
-            _entityName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(_entityName);
+            //_entityName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(_entityName);
 
             SetParameters(replacementsDictionary);
             _replacementsDictionary = replacementsDictionary;
@@ -231,7 +231,6 @@ namespace BrinksTemplate.Wizard
             IoCConfig();
             AutoMapperConfig();
             ContextConfig();
-            //ContextConfig();
             //CreateEntity();
         }
 
@@ -428,6 +427,7 @@ namespace BrinksTemplate.Wizard
                         {
                             writer.WriteLine($"\t\t\tbuilder.RegisterType<{_entityRepository}>().As<{_entityRepositoryInterface}>();");
                             writer.WriteLine($"\t\t\tbuilder.RegisterType<{_entityReadOnlyRepository}>().As<{_entityReadOnlyRepositoryInterface}>();");
+                            writer.WriteLine(infraModuleLines[currentLine - 1]);
                             alreadyWritedDefaultLine = true;
                             alreadyWritedMap = true;
                         }
@@ -547,7 +547,7 @@ namespace BrinksTemplate.Wizard
                     {
                         if (domainToQueryProfileLines[currentLine - 3].Contains("DomainToQueryProfile()"))
                         {
-                            writer.WriteLine($"\t\t\tCreateMap<{_entityName}, {_entityQuery}>();");
+                            writer.WriteLine($"\t\t\tCreateMap<Entities.{_entityName}, {_entityQuery}>();");
                             writer.WriteLine(domainToQueryProfileLines[currentLine - 1]);
                             alreadyWritedMap = true;
                             alreadyWritedDefaultLine = true;
@@ -668,6 +668,7 @@ namespace BrinksTemplate.Wizard
             replacementsDictionary.Add("$DomainCoreServicesNamespace$", $"{_solutionName}.Core.Services");
 
             replacementsDictionary.Add("$InfrastructureDataAccessNamespace$", "Brinks.Infra.DataAccess");
+            replacementsDictionary.Add("$InfrastructureAuditAbstractions$", "Brinks.Infra.Audit.Abstractions");
             replacementsDictionary.Add("$InfrastructureDataAccessEFNamespace$", "Brinks.Infra.DataAccess.EntityFramework");
             replacementsDictionary.Add("$InfrastructureDataAccessEFInterfacesNamespace$", "Brinks.Infra.DataAccess.EntityFramework.Abstractions");
             replacementsDictionary.Add("$InfrastructureLocalizationNamespace$", "Brinks.Infra.Localization");
